@@ -34,6 +34,7 @@ namespace JCorePanel
 
         public Button()
         {
+
             InitializeComponent();
         }
 

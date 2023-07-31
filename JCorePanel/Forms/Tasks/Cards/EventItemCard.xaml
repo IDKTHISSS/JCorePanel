@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="JCorePanel.EventItemCard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:JCorePanel"
+             mc:Ignorable="d" Height="34" Margin="0,5,0,0" Width=" 456" Loaded="UserControl_Loaded" >
+
+    <Grid x:Name="MainGrid">
+        <Border x:Name="LoginBox" Background="#FF242728" CornerRadius="9" Padding="5"   HorizontalAlignment="Center" VerticalAlignment="Center" Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Width}" Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Height}" RenderTransformOrigin="0.5,0.5" Cursor="Hand">
+            <Border.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="-0.075"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Border.RenderTransform>
+            <Grid  VerticalAlignment="Center" Height="32">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="241*" />
+                    <ColumnDefinition Width="9*"/>
+                    <ColumnDefinition Width="0*"/>
+                </Grid.ColumnDefinitions>
+
+                <Label x:Name="TaskData" HorizontalContentAlignment="Left" Foreground="White" Content="RunCSGO #MyFarmPlugin" Margin="2,2,43,1" Grid.ColumnSpan="2"/>
+                <Image x:Name="image" HorizontalAlignment="Left" Height="14" VerticalAlignment="Center" Width="16" Source="/Images/Icons/Delete.png" MouseDown="image_MouseDown" Grid.Column="1" Grid.ColumnSpan="2" Margin="422,0,0,0"/>
+                <Image x:Name="image_Copy" Height="14" Width="16" Source="/Images/Icons/Settings.png" Grid.Column="1" Margin="398,9,16,9" RenderTransformOrigin="0.367,0.711" MouseDown="image_Copy_MouseDown"/>
+
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

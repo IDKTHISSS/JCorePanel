@@ -26,9 +26,8 @@ namespace JCorePanel
     /// <summary>
     /// Логика взаимодействия для AccountInfoWindow.xaml
     /// </summary>
-    public partial class AccountInfoWindow : System.Windows.Controls.UserControl
+    public partial class AccountInfoWindow : BasePopupWindow
     {
-        public Action OnWindowClose;
         private AccountInstance Info;
         private IDisposable GuardTimer;
         private SteamGuardAccount NewMaFile;

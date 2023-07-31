@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using JCorePanel.Classes.Managers;
 using JCorePanelBase;
+using System.Runtime.Remoting;
 
 namespace JCorePanel
 {
@@ -124,10 +125,7 @@ namespace JCorePanel
            
             quickActionButtonImage.MouseDown += (sender, e) =>
             {
-                foreach (var Account in GlobalVars.AccountsList)
-                {
-                    Account.SetupAction();
-                }
+                account.SetupAction();
                 contextMenu.Items.Clear();
                 foreach (var Action in account.ActionList)
                 {
@@ -332,6 +330,13 @@ namespace JCorePanel
             SettingsButtonImage.Height = 14;
             SettingsButtonImage.Opacity = 0;
             SettingsButtonImage.Cursor = Cursors.Hand;
+            if(plugin.Properties == null || plugin.Properties.Count == 0)
+            {
+                SettingsButtonImage.Visibility = Visibility.Collapsed;
+            }
+            SettingsButtonImage.MouseDown += (sender, e) => {
+                Utils.ShowPopupWindow(new PluginPropertySettings(plugin));
+            };
             Grid.SetColumn(SettingsButtonImage, 0);
             grid.Children.Add(SettingsButtonImage);
 
@@ -409,48 +414,68 @@ namespace JCorePanel
             };
             return border;
         }
-        public static Border GenerateTaskCard(JCTaskItem Task)
+        public static Border GenerateSelectAccountTaskCard(AccountInstance account, Action<bool> OnSelect)
         {
             Border border = new Border();
             border.Style = (Style)Application.Current.MainWindow.FindResource("CardStyle");
-            border.Height = 65;
+            border.Cursor= Cursors.Hand;
 
             Grid grid = new Grid();
             grid.Margin = new Thickness(0, -2, -2, -2);
+            border.Width = 138;
+            border.Height = 55;
+
 
             ColumnDefinition column1 = new ColumnDefinition();
-            column1.Width = new GridLength(175); // Update column1 width
+            column1.Width = new GridLength(50); // Update column1 width
             ColumnDefinition column2 = new ColumnDefinition();
             column2.Width = new GridLength(1, GridUnitType.Star); // Set fixed width for column2
             grid.ColumnDefinitions.Add(column1);
             grid.ColumnDefinitions.Add(column2);
 
+            Border ImageBorder = new Border();
+            ImageBorder.CornerRadius = new CornerRadius(9);
+            ImageBorder.Name = "Avatar";
+            ImageBorder.Margin = new Thickness(5, 5, 2, 5);
+
+            ImageBrush imageBrush = new ImageBrush();
+            imageBrush.Stretch = Stretch.Fill;
+            imageBrush.ImageSource = new BitmapImage(new Uri(account.AccountCache == null ? "https://avatars.cloudflare.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg" : account.AccountCache.AvatarURL));
+
+            ImageBorder.Background = imageBrush;
+
+            Grid.SetColumn(ImageBorder, 0);
+            grid.Children.Add(ImageBorder);
+
             Grid innerGrid = new Grid();
+            innerGrid.Name = "InfoGrid";
+            innerGrid.Height = 55;
             innerGrid.HorizontalAlignment = HorizontalAlignment.Left; // Align the innerGrid to the right side
 
-            Grid.SetColumn(innerGrid, 0);
+            Grid.SetColumn(innerGrid, 1);
             grid.Children.Add(innerGrid);
 
             Label titleLabel = new Label();
             titleLabel.Name = "TitleLabel";
-            titleLabel.Content = Task.TaskName;
-            titleLabel.Width = 150;
-            titleLabel.Height = 45;
-            titleLabel.FontSize = 14;
+            string labelText = account.AccountCache == null ? "Name" : account.AccountCache.Nickname;
+            titleLabel.Content = labelText.Length > 10 ? labelText.Substring(0, 10) + "..." : labelText;
             titleLabel.Foreground = Brushes.White;
-            titleLabel.Margin = new Thickness(5, -10, -10, -10);
+            titleLabel.Margin = new Thickness(0, 10, -10, -10);
             titleLabel.HorizontalAlignment = HorizontalAlignment.Left;
             innerGrid.Children.Add(titleLabel);
 
-            Label placeholderLabel = new Label();
-            placeholderLabel.Name = "PlaceholderLabel";
-            placeholderLabel.Content = "#" + Task.TaskStatus;
-            placeholderLabel.FontSize = 10;
-            placeholderLabel.Margin = new Thickness(5, 28, -10, 10);
-            placeholderLabel.Foreground = (Brush)new BrushConverter().ConvertFrom("#8A41FB");
-            placeholderLabel.RenderTransformOrigin = new Point(0.258, 0.225);
-            placeholderLabel.HorizontalAlignment = HorizontalAlignment.Left;
-            innerGrid.Children.Add(placeholderLabel);
+            Label loginLabel = new Label();
+            loginLabel.Name = "LoginLabel";
+            loginLabel.Content = account.AccountInfo.Login.Length > 14 ? account.AccountInfo.Login.Substring(0, 14) + "..." : account.AccountInfo.Login;
+            loginLabel.Margin = new Thickness(0, 25, -10, 10);
+            loginLabel.Foreground = Brushes.Gray;
+            loginLabel.RenderTransformOrigin = new Point(0.258, 0.225);
+            loginLabel.FontSize = 9;
+            loginLabel.HorizontalAlignment = HorizontalAlignment.Left;
+            innerGrid.Children.Add(loginLabel);
+
+
+
 
             Rectangle hoverRectangle = new Rectangle();
             hoverRectangle.Name = "HoverRectangle";
@@ -459,159 +484,230 @@ namespace JCorePanel
             hoverRectangle.RadiusY = 9;
             hoverRectangle.HorizontalAlignment = HorizontalAlignment.Left; // Установите горизонтальное выравнивание слева
             hoverRectangle.Opacity = 0;
-            hoverRectangle.Height = 65;
+            hoverRectangle.Height = 55;
             hoverRectangle.Margin = new Thickness(-2, 0, 0, 0);
             hoverRectangle.VerticalAlignment = VerticalAlignment.Center;
-            hoverRectangle.Width = 163;
+            hoverRectangle.Width = 138;
             hoverRectangle.Fill = new SolidColorBrush(Color.FromArgb(0xFF, 0x3C, 0xFF, 0x8D)); // Задайте цвет заполнения
             grid.Children.Add(hoverRectangle);
 
-            Image deleteButtonImage = new Image();
-            deleteButtonImage.Source = new BitmapImage(new Uri("/Images/Icons/Delete.png", UriKind.Relative));
-            deleteButtonImage.Margin = new Thickness(120, 24, 10, 23);
-            deleteButtonImage.Width = 15;
-            deleteButtonImage.Cursor = Cursors.Hand;
-            deleteButtonImage.Height = 13;
-            deleteButtonImage.Opacity = 0;
-            Grid.SetColumn(deleteButtonImage, 0);
-
-            grid.Children.Add(deleteButtonImage);
+            bool IsSelected = false;
+            border.MouseDown += (sender, e) => {
+                IsSelected = !IsSelected;
+                OnSelect(IsSelected);
+                DoubleAnimation hoverRectangleAnimation = new DoubleAnimation(IsSelected ? 0.5 : 0, TimeSpan.FromSeconds(0.2));
+                hoverRectangle.BeginAnimation(UIElement.OpacityProperty, hoverRectangleAnimation);
 
 
 
-            Image infoButtonImage = new Image();
-            infoButtonImage.Source = new BitmapImage(new Uri("/Images/Icons/Info.png", UriKind.Relative));
-            infoButtonImage.Margin = new Thickness(80, 24, 10, 23);
-            infoButtonImage.Width = 13;
-            infoButtonImage.Height = 13;
-            infoButtonImage.Cursor = Cursors.Hand;
-            infoButtonImage.Opacity = 0;
-            Grid.SetColumn(infoButtonImage, 0);
-            grid.Children.Add(infoButtonImage);
+                BlurEffect cardImageEffect = new BlurEffect();
+                cardImageEffect.Radius = IsSelected ? 1 : 0;
+                ImageBorder.Effect = cardImageEffect;
 
+                BlurEffect titleLabelEffect = new BlurEffect();
+                titleLabelEffect.Radius = IsSelected ? 1 : 0;
+                titleLabel.Effect = titleLabelEffect;
 
-            Image SettingsButtonImage = new Image();
-            SettingsButtonImage.Source = new BitmapImage(new Uri("/Images/Icons/Settings.png", UriKind.Relative));
-            SettingsButtonImage.Margin = new Thickness(40, 24, 10, 23);
-            SettingsButtonImage.Width = 17;
-            SettingsButtonImage.Cursor = Cursors.Hand;
-            SettingsButtonImage.Height = 14;
-            SettingsButtonImage.Opacity = 0;
-            Grid.SetColumn(SettingsButtonImage, 0);
-            grid.Children.Add(SettingsButtonImage);
-
-            Image TasksButtonImage = new Image();
-            TasksButtonImage.Source = new BitmapImage(new Uri("/Images/Icons/Document.png", UriKind.Relative));
-            TasksButtonImage.Margin = new Thickness(0, 24, 10, 23);
-            TasksButtonImage.Width = 17;
-            TasksButtonImage.Height = 14;
-            TasksButtonImage.Cursor = Cursors.Hand;
-            TasksButtonImage.Opacity = 0;
-            Grid.SetColumn(TasksButtonImage, 0);
-            grid.Children.Add(TasksButtonImage);
-
-
-            Image AccountsButtonImage = new Image();
-            AccountsButtonImage.Source = new BitmapImage(new Uri("/Images/Icons/User.png", UriKind.Relative));
-            AccountsButtonImage.Margin = new Thickness(-40, 24, 10, 23);
-            AccountsButtonImage.Width = 17;
-            AccountsButtonImage.Height = 14;
-            AccountsButtonImage.Cursor = Cursors.Hand;
-            AccountsButtonImage.Opacity = 0;
-            Grid.SetColumn(AccountsButtonImage, 0);
-            grid.Children.Add(AccountsButtonImage);
-
-            Image StartButtonImage = new Image();
-            StartButtonImage.Source = new BitmapImage(new Uri("/Images/Icons/Play.png", UriKind.Relative));
-            StartButtonImage.Margin = new Thickness(-110, 0, 10, 0);
-            StartButtonImage.Width = 34;
-            StartButtonImage.Height = 28;
-            StartButtonImage.Cursor = Cursors.Hand;
-            StartButtonImage.Opacity = 0;
-            StartButtonImage.MouseDown +=  (sender, e) =>
-            {
-                Thread thread = new Thread(() =>
-                {
-                    TaskManager.StartTaskByTaskItem(Task);
-                });
-                thread.Start();
-
-                
+                BlurEffect loginLabelEffect = new BlurEffect();
+                loginLabelEffect.Radius = IsSelected ? 1 : 0;
+                loginLabel.Effect = loginLabelEffect;
             };
-            Grid.SetColumn(StartButtonImage, 0);
-            grid.Children.Add(StartButtonImage);
-
-
-
-            border.Child = grid;
-
             border.MouseEnter += (sender, e) =>
             {
+                if (IsSelected) return;
                 DoubleAnimation hoverRectangleAnimation = new DoubleAnimation(0.5, TimeSpan.FromSeconds(0.2));
                 hoverRectangle.BeginAnimation(UIElement.OpacityProperty, hoverRectangleAnimation);
 
-                DoubleAnimation deleteButtonAnimation = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
-                deleteButtonImage.BeginAnimation(UIElement.OpacityProperty, deleteButtonAnimation);
 
-                DoubleAnimation infoButtonAnimation = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
-                infoButtonImage.BeginAnimation(UIElement.OpacityProperty, infoButtonAnimation);
 
-                DoubleAnimation quickActionButtonAnimation = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
-                SettingsButtonImage.BeginAnimation(UIElement.OpacityProperty, quickActionButtonAnimation);
-
-                DoubleAnimation AccountsButtonAnimation = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
-                AccountsButtonImage.BeginAnimation(UIElement.OpacityProperty, AccountsButtonAnimation);
-
-                DoubleAnimation TasksButtonAnimation = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
-                TasksButtonImage.BeginAnimation(UIElement.OpacityProperty, TasksButtonAnimation);
-
-                DoubleAnimation pluginEnabledButtonAnimation = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
-                StartButtonImage.BeginAnimation(UIElement.OpacityProperty, pluginEnabledButtonAnimation);
-
+                BlurEffect cardImageEffect = new BlurEffect();
+                cardImageEffect.Radius = 5;
+                ImageBorder.Effect = cardImageEffect;
 
                 BlurEffect titleLabelEffect = new BlurEffect();
                 titleLabelEffect.Radius = 5;
                 titleLabel.Effect = titleLabelEffect;
 
+                BlurEffect loginLabelEffect = new BlurEffect();
+                loginLabelEffect.Radius = 5;
+                loginLabel.Effect = loginLabelEffect;
 
-                BlurEffect placeholderLabelEffect = new BlurEffect();
-                placeholderLabelEffect.Radius = 5;
-                placeholderLabel.Effect = placeholderLabelEffect;
+
             };
 
             border.MouseLeave += (sender, e) =>
             {
+                if (IsSelected)  return;
                 DoubleAnimation hoverRectangleAnimation = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
                 hoverRectangle.BeginAnimation(UIElement.OpacityProperty, hoverRectangleAnimation);
 
-                DoubleAnimation deleteButtonAnimation = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
-                deleteButtonImage.BeginAnimation(UIElement.OpacityProperty, deleteButtonAnimation);
 
-                DoubleAnimation infoButtonAnimation = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
-                infoButtonImage.BeginAnimation(UIElement.OpacityProperty, infoButtonAnimation);
 
-                DoubleAnimation quickActionButtonAnimation = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
-                SettingsButtonImage.BeginAnimation(UIElement.OpacityProperty, quickActionButtonAnimation);
-
-                DoubleAnimation AccountsButtonAnimation = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
-                AccountsButtonImage.BeginAnimation(UIElement.OpacityProperty, AccountsButtonAnimation);
-
-                DoubleAnimation TasksButtonAnimation = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
-                TasksButtonImage.BeginAnimation(UIElement.OpacityProperty, TasksButtonAnimation);
-
-                DoubleAnimation pluginEnabledButtonAnimation = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
-                StartButtonImage.BeginAnimation(UIElement.OpacityProperty, pluginEnabledButtonAnimation);
+                BlurEffect cardImageEffect = new BlurEffect();
+                cardImageEffect.Radius = 0;
+                ImageBorder.Effect = cardImageEffect;
 
                 BlurEffect titleLabelEffect = new BlurEffect();
                 titleLabelEffect.Radius = 0;
                 titleLabel.Effect = titleLabelEffect;
 
-                BlurEffect placeholderLabelEffect = new BlurEffect();
-                placeholderLabelEffect.Radius = 0;
-                placeholderLabel.Effect = placeholderLabelEffect;
+                BlurEffect loginLabelEffect = new BlurEffect();
+                loginLabelEffect.Radius = 0;
+                loginLabel.Effect = loginLabelEffect;
             };
+            border.Child = grid;
             return border;
         }
+
+        public static Border GenerateAccountTaskCard(AccountInstance account, JCTaskItem taskItem)
+        {
+            Border border = new Border();
+            border.Style = (Style)Application.Current.MainWindow.FindResource("CardStyle");
+
+            Grid grid = new Grid();
+            grid.Margin = new Thickness(0, -2, -2, -2);
+            border.Width = 138;
+            border.Height = 55;
+
+
+            ColumnDefinition column1 = new ColumnDefinition();
+            column1.Width = new GridLength(50); // Update column1 width
+            ColumnDefinition column2 = new ColumnDefinition();
+            column2.Width = new GridLength(1, GridUnitType.Star); // Set fixed width for column2
+            grid.ColumnDefinitions.Add(column1);
+            grid.ColumnDefinitions.Add(column2);
+
+            Border ImageBorder = new Border();
+            ImageBorder.CornerRadius = new CornerRadius(9);
+            ImageBorder.Name = "Avatar";
+            ImageBorder.Margin = new Thickness(5, 5, 2, 5);
+
+            ImageBrush imageBrush = new ImageBrush();
+            imageBrush.Stretch = Stretch.Fill;
+            imageBrush.ImageSource = new BitmapImage(new Uri(account.AccountCache == null ? "https://avatars.cloudflare.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg" : account.AccountCache.AvatarURL));
+
+            ImageBorder.Background = imageBrush;
+
+            Grid.SetColumn(ImageBorder, 0);
+            grid.Children.Add(ImageBorder);
+
+            Grid innerGrid = new Grid();
+            innerGrid.Name = "InfoGrid";
+            innerGrid.Height = 55;
+            innerGrid.HorizontalAlignment = HorizontalAlignment.Left; // Align the innerGrid to the right side
+
+            Grid.SetColumn(innerGrid, 1);
+            grid.Children.Add(innerGrid);
+
+            Label titleLabel = new Label();
+            titleLabel.Name = "TitleLabel";
+            string labelText = account.AccountCache == null ? "Name" : account.AccountCache.Nickname;
+            titleLabel.Content = labelText.Length > 10 ? labelText.Substring(0, 10) + "..." : labelText;
+            titleLabel.Foreground = Brushes.White;
+            titleLabel.Margin = new Thickness(0, 10, -10, -10);
+            titleLabel.HorizontalAlignment = HorizontalAlignment.Left;
+            innerGrid.Children.Add(titleLabel);
+
+            Label loginLabel = new Label();
+            loginLabel.Name = "LoginLabel";
+            loginLabel.Content = account.AccountInfo.Login.Length > 14 ? account.AccountInfo.Login.Substring(0, 14) + "..." : account.AccountInfo.Login;
+            loginLabel.Margin = new Thickness(0, 25, -10, 10);
+            loginLabel.Foreground = Brushes.Gray;
+            loginLabel.RenderTransformOrigin = new Point(0.258, 0.225);
+            loginLabel.FontSize = 9;
+            loginLabel.HorizontalAlignment = HorizontalAlignment.Left;
+            innerGrid.Children.Add(loginLabel);
+
+            
+
+
+            Rectangle hoverRectangle = new Rectangle();
+            hoverRectangle.Name = "HoverRectangle";
+            hoverRectangle.SetValue(Grid.ColumnSpanProperty, 2);
+            hoverRectangle.RadiusX = 9;
+            hoverRectangle.RadiusY = 9;
+            hoverRectangle.HorizontalAlignment = HorizontalAlignment.Left; // Установите горизонтальное выравнивание слева
+            hoverRectangle.Opacity = 0;
+            hoverRectangle.Height = 55;
+            hoverRectangle.Margin = new Thickness(-2, 0, 0, 0);
+            hoverRectangle.VerticalAlignment = VerticalAlignment.Center;
+            hoverRectangle.Width = 138;
+            hoverRectangle.Fill = new SolidColorBrush(Color.FromArgb(0xFF, 0x3C, 0xFF, 0x8D)); // Задайте цвет заполнения
+            grid.Children.Add(hoverRectangle);
+
+            Image DeleteButtonImage = new Image();
+            DeleteButtonImage.Source = new BitmapImage(new Uri("/Images/Icons/Delete.png", UriKind.Relative));
+            DeleteButtonImage.Margin = new Thickness(35, 0, 0, 0);
+            DeleteButtonImage.Width = 17;
+            DeleteButtonImage.Height = 17;
+            DeleteButtonImage.Cursor = Cursors.Hand;
+            DeleteButtonImage.Opacity = 0;
+            DeleteButtonImage.MouseDown += (sender, e) => {
+                foreach(var task in TaskManager.TaskList)
+                {
+                    if(task.TaskItem.TaskName == taskItem.TaskName)
+                    {
+                        task.TaskItem.AccountNames.RemoveAll(item => item == account.AccountInfo.Login);
+                        (border.Parent as UniformGrid).Children.Remove(border);
+                        TaskManager.EditTask(taskItem, task.TaskItem);
+                    }
+                }
+            };
+            Grid.SetColumn(DeleteButtonImage, 1);
+            grid.Children.Add(DeleteButtonImage);
+
+            border.MouseEnter += (sender, e) =>
+            {
+                if (account.IsInWork) return;
+                DoubleAnimation hoverRectangleAnimation = new DoubleAnimation(0.5, TimeSpan.FromSeconds(0.2));
+                hoverRectangle.BeginAnimation(UIElement.OpacityProperty, hoverRectangleAnimation);
+
+                DoubleAnimation DeleteButtonImageAnimation = new DoubleAnimation(1, TimeSpan.FromSeconds(0.2));
+                DeleteButtonImage.BeginAnimation(UIElement.OpacityProperty, DeleteButtonImageAnimation);
+
+
+                BlurEffect cardImageEffect = new BlurEffect();
+                cardImageEffect.Radius = 5;
+                ImageBorder.Effect = cardImageEffect;
+
+                BlurEffect titleLabelEffect = new BlurEffect();
+                titleLabelEffect.Radius = 5;
+                titleLabel.Effect = titleLabelEffect;
+
+                BlurEffect loginLabelEffect = new BlurEffect();
+                loginLabelEffect.Radius = 5;
+                loginLabel.Effect = loginLabelEffect;
+
+
+            };
+
+            border.MouseLeave += (sender, e) =>
+            {
+                if (account.IsInWork) return;
+                DoubleAnimation hoverRectangleAnimation = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
+                hoverRectangle.BeginAnimation(UIElement.OpacityProperty, hoverRectangleAnimation);
+
+                DoubleAnimation DeleteButtonImageAnimation = new DoubleAnimation(0, TimeSpan.FromSeconds(0.2));
+                DeleteButtonImage.BeginAnimation(UIElement.OpacityProperty, DeleteButtonImageAnimation);
+
+
+
+                BlurEffect cardImageEffect = new BlurEffect();
+                cardImageEffect.Radius = 0;
+                ImageBorder.Effect = cardImageEffect;
+
+                BlurEffect titleLabelEffect = new BlurEffect();
+                titleLabelEffect.Radius = 0;
+                titleLabel.Effect = titleLabelEffect;
+
+                BlurEffect loginLabelEffect = new BlurEffect();
+                loginLabelEffect.Radius = 0;
+                loginLabel.Effect = loginLabelEffect;
+            };
+            border.Child = grid;
+            return border;
+        }
+
 
         public static ContextMenu CreateMenuItem(string[] subItems, string name, ContextMenu parentMenu, AccountInstance Account, string ActionName)
         {
@@ -664,222 +760,33 @@ namespace JCorePanel
     
         public static void ShowDialog(string Messege)
         {
-            Dialog myPopupWindow = new Dialog(Messege);
-            var grid = (Application.Current.MainWindow as MainWindow).MainWindowXAML.Child as Grid;
-            grid.Children.Add(myPopupWindow);
-            Grid.SetColumn(myPopupWindow, 1);
-            myPopupWindow.VerticalAlignment = VerticalAlignment.Center;
-            myPopupWindow.HorizontalAlignment = HorizontalAlignment.Center;
-            myPopupWindow.Margin = new Thickness(0, 0, 0, 0);
-            Grid.SetRowSpan(myPopupWindow, 2);
-            myPopupWindow.OnWindowClose += () => {
-                myPopupWindow.Visibility = Visibility.Collapsed;
-                foreach (var child in ((Application.Current.MainWindow as MainWindow).MainWindowXAML.Child as Grid).Children)
-                {
-                    if (!(child is Dialog window))
-                    {
-                        if (child is FrameworkElement cont)
-                        {
-                            cont.Effect = null;
-                            cont.IsEnabled = true;
-                        }
-                    }
-                }
-                myPopupWindow = null;
-            };
-            myPopupWindow.Visibility = Visibility.Visible;
-
-            if ((Application.Current.MainWindow as MainWindow).MainWindowXAML.Child is Grid grid222)
-                foreach (var child in grid222.Children)
-                {
-                    if (!(child is Dialog window))
-                    {
-                        if (child is FrameworkElement cont)
-                        {
-                            BlurEffect blurEffect = new BlurEffect();
-                            blurEffect.Radius = 5;
-                            cont.Effect = blurEffect;
-                            cont.IsEnabled = false;
-                        }
-                    }
-                }
+            Utils.ShowPopupWindow(new Dialog(Messege));
         }
         public static void ShowDialogInput(string Messege, string Placeholder, Action<string> EndResponse)
         {
             DialogWithInput myPopupWindow = new DialogWithInput(Messege, Placeholder);
-            var grid = (Application.Current.MainWindow as MainWindow).MainWindowXAML.Child as Grid;
-            grid.Children.Add(myPopupWindow);
-            Grid.SetColumn(myPopupWindow, 1);
-            myPopupWindow.VerticalAlignment = VerticalAlignment.Center;
-            myPopupWindow.HorizontalAlignment = HorizontalAlignment.Center;
-            myPopupWindow.Margin = new Thickness(0, 0, 0, 0);
-            Grid.SetRowSpan(myPopupWindow, 2);
-            
-            myPopupWindow.Visibility = Visibility.Visible;
-
-            if ((Application.Current.MainWindow as MainWindow).MainWindowXAML.Child is Grid grid222)
-                foreach (var child in grid222.Children)
-                {
-                    if (!(child is DialogWithInput window))
-                    {
-                        if (child is FrameworkElement cont)
-                        {
-                            BlurEffect blurEffect = new BlurEffect();
-                            blurEffect.Radius = 5;
-                            cont.Effect = blurEffect;
-                            cont.IsEnabled = false;
-                        }
-                    }
-                }  
-            myPopupWindow.OnCloseDialog += (string response) => {
-                myPopupWindow.Visibility = Visibility.Collapsed;
-                foreach (var child in ((Application.Current.MainWindow as MainWindow).MainWindowXAML.Child as Grid).Children)
-                {
-                    if (!(child is DialogWithInput window))
-                    {
-                        if (child is FrameworkElement cont)
-                        {
-                            cont.Effect = null;
-                            cont.IsEnabled = true;
-                        }
-                    }
-                }
-                myPopupWindow = null;
-            };
+            Utils.ShowPopupWindow(myPopupWindow);
             myPopupWindow.OnCloseDialog += EndResponse;
         }
 
         public static void ShowDialogConfirm(string Messege, Action<bool> EndResponse)
         {
             DialogConfirm myPopupWindow = new DialogConfirm(Messege);
-            var grid = (Application.Current.MainWindow as MainWindow).MainWindowXAML.Child as Grid;
-            grid.Children.Add(myPopupWindow);
-            Grid.SetColumn(myPopupWindow, 1);
-            myPopupWindow.VerticalAlignment = VerticalAlignment.Center;
-            myPopupWindow.HorizontalAlignment = HorizontalAlignment.Center;
-            myPopupWindow.Margin = new Thickness(0, 0, 0, 0);
-            Grid.SetRowSpan(myPopupWindow, 2);
-
-            myPopupWindow.Visibility = Visibility.Visible;
-
-            if ((Application.Current.MainWindow as MainWindow).MainWindowXAML.Child is Grid grid222)
-                foreach (var child in grid222.Children)
-                {
-                    if (!(child is DialogConfirm window))
-                    {
-                        if (child is FrameworkElement cont)
-                        {
-                            BlurEffect blurEffect = new BlurEffect();
-                            blurEffect.Radius = 5;
-                            cont.Effect = blurEffect;
-                            cont.IsEnabled = false;
-                        }
-                    }
-                }
-            myPopupWindow.OnConfirm += (bool response) => {
-                myPopupWindow.Visibility = Visibility.Collapsed;
-                foreach (var child in ((Application.Current.MainWindow as MainWindow).MainWindowXAML.Child as Grid).Children)
-                {
-                    if (!(child is DialogConfirm window))
-                    {
-                        if (child is FrameworkElement cont)
-                        {
-                            cont.Effect = null;
-                            cont.IsEnabled = true;
-                        }
-                    }
-                }
-                myPopupWindow = null;
-            };
+            Utils.ShowPopupWindow(myPopupWindow);
             myPopupWindow.OnConfirm += EndResponse;
         }
         public static void ShowPluginInfo(JCPlugin plugin)
         {
-            PluginInfo myPopupWindow = new PluginInfo(plugin);
-            var grid = (Application.Current.MainWindow as MainWindow).MainWindowXAML.Child as Grid;
-            grid.Children.Add(myPopupWindow);
-            Grid.SetColumn(myPopupWindow, 1);
-            myPopupWindow.VerticalAlignment = VerticalAlignment.Center;
-            myPopupWindow.HorizontalAlignment = HorizontalAlignment.Center;
-            myPopupWindow.Margin = new Thickness(0, 0, 0, 0);
-            Grid.SetRowSpan(myPopupWindow, 2);
-
-            myPopupWindow.Visibility = Visibility.Visible;
-
-            if ((Application.Current.MainWindow as MainWindow).MainWindowXAML.Child is Grid grid222)
-                foreach (var child in grid222.Children)
-                {
-                    if (!(child is PluginInfo window))
-                    {
-                        if (child is FrameworkElement cont)
-                        {
-                            BlurEffect blurEffect = new BlurEffect();
-                            blurEffect.Radius = 5;
-                            cont.Effect = blurEffect;
-                            cont.IsEnabled = false;
-                        }
-                    }
-                }
-            myPopupWindow.OnWindowClose += () => {
-                myPopupWindow.Visibility = Visibility.Collapsed;
-                foreach (var child in ((Application.Current.MainWindow as MainWindow).MainWindowXAML.Child as Grid).Children)
-                {
-                    if (!(child is PluginInfo window))
-                    {
-                        if (child is FrameworkElement cont)
-                        {
-                            cont.Effect = null;
-                            cont.IsEnabled = true;
-                        }
-                    }
-                }
-                myPopupWindow = null;
-            };
+            Utils.ShowPopupWindow(new PluginInfo(plugin));
         }
 
         public static void ShowAccountInfo(AccountInstance Account)
         {
-            AccountInfoWindow myPopupWindow = new AccountInfoWindow(Account);
-            var grid = (Application.Current.MainWindow as MainWindow).MainWindowXAML.Child as Grid;
-            grid.Children.Add(myPopupWindow);
-            Grid.SetColumn(myPopupWindow, 1);
-            myPopupWindow.VerticalAlignment = VerticalAlignment.Center;
-            myPopupWindow.HorizontalAlignment = HorizontalAlignment.Center;
-            myPopupWindow.Margin = new Thickness(75, 0, 0, 0);
-            Grid.SetRowSpan(myPopupWindow, 2);
-
-            myPopupWindow.Visibility = Visibility.Visible;
-
-            if ((Application.Current.MainWindow as MainWindow).MainWindowXAML.Child is Grid grid222)
-                foreach (var child in grid222.Children)
-                {
-                    if (!(child is AccountInfoWindow window))
-                    {
-                        if (child is FrameworkElement cont)
-                        {
-                            BlurEffect blurEffect = new BlurEffect();
-                            blurEffect.Radius = 5;
-                            cont.Effect = blurEffect;
-                            cont.IsEnabled = false;
-                        }
-                    }
-                }
-            myPopupWindow.OnWindowClose += () => {
-                myPopupWindow.Visibility = Visibility.Collapsed;
-                foreach (var child in ((Application.Current.MainWindow as MainWindow).MainWindowXAML.Child as Grid).Children)
-                {
-                    if (!(child is AccountInfoWindow window))
-                    {
-                        if (child is FrameworkElement cont)
-                        {
-                            cont.Effect = null;
-                            cont.IsEnabled = true;
-                        }
-                    }
-                }
-                myPopupWindow = null;
-            };
+            Utils.ShowPopupWindow(new AccountInfoWindow(Account));
         }
-
+        public static void ShowTaskSettings(JCTaskItem Task)
+        {
+            Utils.ShowPopupWindow(new TaskSettingsWindow(Task));
+        }
     }
 }

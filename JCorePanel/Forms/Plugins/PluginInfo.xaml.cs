@@ -17,9 +17,9 @@ namespace JCorePanel
     /// <summary>
     /// Логика взаимодействия для PluginInfo.xaml
     /// </summary>
-    public partial class PluginInfo : UserControl
+    public partial class PluginInfo : BasePopupWindow
     {
-        public Action OnWindowClose;
+        
         public JCPlugin CurrectPlugin;
         public PluginInfo(JCPlugin Plugin)
         {

@@ -1,0 +1,36 @@
+﻿<local:BasePopupWindow
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:JCorePanel" x:Class="JCorePanel.PluginPropertySettings"
+             Height="480" Width="520">
+
+    <Grid Margin="0,0,10,5">
+        <Border CornerRadius="12" BorderThickness="4"  Padding="0" Background="#8A41FB" Margin="0,0,-7,-6" RenderTransformOrigin="0.5,0.5">
+            <Border.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="-0.016"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Border.RenderTransform>
+            <Border.BitmapEffect>
+                <BlurBitmapEffect Radius="19"/>
+            </Border.BitmapEffect>
+
+        </Border>
+        <Border x:Name="MainWindowXAML" CornerRadius="12" BorderThickness="4"  Padding="0" Background="#111111" Margin="-1,0,-7,-6">
+
+            <Grid>
+
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden" Width="470" Margin="20,10,20,99">
+                    <UniformGrid x:Name="PropreryListGrid" Columns="1" VerticalAlignment="Top" HorizontalAlignment="Center" Width="470"/>
+                </ScrollViewer>
+                <local:Button ButtonText="Save" Height="34" Margin="164,407,164,32" ButtonClick="Button_ButtonClick"/>
+
+
+            </Grid>
+        </Border>
+
+    </Grid>
+</local:BasePopupWindow>

@@ -1,4 +1,5 @@
 ﻿using JCorePanelBase;
+using JCorePanelBase.Structures;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SteamKit2.Internal;
@@ -10,6 +11,7 @@ using System.Reflection;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Windows.Media;
 using static SteamKit2.DepotManifest;
 
@@ -76,6 +78,22 @@ namespace JCorePanel
                         {
                             PluginInfo.FrendlyName = field.GetValue(null) as string;
                         }
+
+                        field = type.GetField("PLUGIN_SETTINGS", BindingFlags.Public | BindingFlags.Static);
+
+                        if (field != null)
+                        {
+                            PluginInfo.Properties = field.GetValue(null) as List<JCPluginProperty>;
+                            foreach (var plugin in ConfigMenager.PanelConfig.PluginsSettings)
+                            {
+                                if (plugin.PluginName == PluginInfo.Name)
+                                {
+                                    Utils.AddOrUpdateProperties(PluginInfo.Properties, plugin.PluginSettings);
+                                }
+                            }
+                            
+                        }
+
                         field = type.GetField("PLUGIN_AUTHOR", BindingFlags.Public | BindingFlags.Static);
 
                         if (field != null)
@@ -83,27 +101,23 @@ namespace JCorePanel
                             PluginInfo.Author = field.GetValue(null) as string;
                         }
                         PluginInfo.Hash = Utils.CalculateSHA512Hash(dllFile);
-                        PluginInfo.Status = PluginStatus;
-                        PluginInfo.assembly = assembly;
-                        try
+
+                        foreach(var plugin in ConfigMenager.PanelConfig.PluginsSettings)
                         {
-                            string filePath = "EnabledPlugins.json";
-                            string jsonString = File.ReadAllText(filePath);
-
-                            string[] enabledPlugins = JsonConvert.DeserializeObject<string[]>(jsonString);
-
-                            foreach (string plugin in enabledPlugins)
+                            if(plugin.PluginName == PluginInfo.Name)
                             {
-                                if(plugin == PluginInfo.Name)
-                                {
+                                if(plugin.isEnabled)
                                     PluginInfo.IsEnabled = true;
-                                }
                             }
                         }
-                        catch (FileNotFoundException)
+                        PluginInfo.Status = PluginStatus;
+                        PluginInfo.assembly = assembly;
+                        if (!ConfigMenager.PanelConfig.PluginsSettings.Exists(item => item.PluginName == PluginInfo.Name))
                         {
-                            Console.WriteLine("Файл EnabledPlugins.json не найден.");
+                            ConfigMenager.PanelConfig.PluginsSettings.Add(new JCPluginRef { PluginName = PluginInfo.Name, isEnabled = false, PluginSettings = PluginInfo.Properties });
+                            ConfigMenager.SaveSettings();
                         }
+
                         PluginsList.Add(PluginInfo);
                     }
                 }
@@ -122,33 +136,18 @@ namespace JCorePanel
                     tempPlugin.IsEnabled = true;
                     PluginsList[i] = tempPlugin;
 
-                    if (!File.Exists("EnabledPlugins.json"))
+                    foreach (var plugin in ConfigMenager.PanelConfig.PluginsSettings.ToList())
                     {
-                        // Если файл не существует, создаем его и добавляем пустой массив
-                        JArray pluginArray2 = new JArray();
-                        File.WriteAllText("EnabledPlugins.json", pluginArray2.ToString());
-                    }
-                    // Если файл существует, читаем его содержимое и проверяем наличие строки
-                    string fileContent = File.ReadAllText("EnabledPlugins.json");
-                    JArray pluginArray = JArray.Parse(fileContent);
-
-                    bool hasString = false;
-                    foreach (string pluginName in pluginArray)
-                    {
-                        if (pluginName == tempPlugin.Name)
+                        if (plugin.PluginName == Plugin.Name)
                         {
-                            hasString = true;
-                            break;
+                            JCPluginRef newPlugin = plugin;
+                            newPlugin.isEnabled = true;
+                            ConfigMenager.PanelConfig.PluginsSettings.Remove(plugin);
+                            ConfigMenager.PanelConfig.PluginsSettings.Add(newPlugin); 
+                            ConfigMenager.SaveSettings();
                         }
                     }
-
-                    if (!hasString)
-                    {
-                        // Если нет строки, добавляем ее в массив и сохраняем обновленное содержимое в файл
-                        pluginArray.Add(tempPlugin.Name);
-                        File.WriteAllText("EnabledPlugins.json", pluginArray.ToString());
-                    }
-
+                    ConfigMenager.SaveSettings();
                 }
             }
         }
@@ -175,25 +174,20 @@ namespace JCorePanel
                     var tempPlugin = PluginsList[i];
                     tempPlugin.IsEnabled = false;
                     PluginsList[i] = tempPlugin;
-                    if (!File.Exists("EnabledPlugins.json"))
+
+
+                    foreach (var plugin in ConfigMenager.PanelConfig.PluginsSettings.ToList())
                     {
-                        // Если файл не существует, создаем его и добавляем пустой массив
-                        JArray pluginArray2 = new JArray();
-                        File.WriteAllText("EnabledPlugins.json", pluginArray2.ToString());
-                    }
-                    // Если файл существует, читаем его содержимое и проверяем наличие строки
-                    string fileContent = File.ReadAllText("EnabledPlugins.json");
-                    JArray pluginArray = JArray.Parse(fileContent);
-                    for (int j = 0; j < pluginArray.Count; j++)
-                    {
-                        string pluginName = pluginArray[j].ToString();
-                        if (pluginName == tempPlugin.Name)
+                        if (plugin.PluginName == Plugin.Name)
                         {
-                            pluginArray.RemoveAt(j);
-                            File.WriteAllText("EnabledPlugins.json", pluginArray.ToString());
-                            break;
+                            JCPluginRef newPlugin = plugin;
+                            newPlugin.isEnabled = false;
+                            ConfigMenager.PanelConfig.PluginsSettings.Remove(plugin);
+                            ConfigMenager.PanelConfig.PluginsSettings.Add(newPlugin);
+                            ConfigMenager.SaveSettings();
                         }
                     }
+                    ConfigMenager.SaveSettings();
 
                 }
             }
@@ -248,7 +242,7 @@ namespace JCorePanel
                     {
                         object instance = Activator.CreateInstance(type);
 
-                        type.GetMethod("LoadActions").Invoke(instance, null);
+                        type.GetMethod("LoadActions").Invoke(instance, new object[] { CurrectAccount } );
                         var method = type.GetMethod("GetActions");
                         List<JCAction> result = (List<JCAction>)method.Invoke(instance, null);
                        
@@ -261,7 +255,6 @@ namespace JCorePanel
             }
             return PluginsActions;
         }
-
         public static JArray LoadAllStatus()
         {
             JArray result = Utils.GetJsonArrayFromUrl("https://pastebin.com/raw/BqvJiVHj");
@@ -282,6 +275,32 @@ namespace JCorePanel
                 }
             }
             return "Not Verified";
+        }
+   
+        public static List<JCEventInstance> GetEventByPlugin(JCPlugin plugin)
+        {
+            List<JCEventInstance> tasks = new List<JCEventInstance>();
+
+            Type[] types = GetPluginByName(plugin.Name).assembly.GetTypes();
+
+            foreach (Type type in types)
+            {
+                if (type.IsClass && type.BaseType.Name == "JCEventBase")
+                {
+                    object instance = Activator.CreateInstance(type, new object[] { new List<JCEventProperty>() });
+                    FieldInfo field = type.GetField("Name");
+                    string taskName = (string)field.GetValue(instance);
+                    JCEventInstance newEvent = new JCEventInstance();
+                    newEvent.Name = (string)type.GetField("Name").GetValue(instance);
+                    newEvent.Description = (string)type.GetField("Description").GetValue(instance);
+                    JCTask newTask = new JCTask();
+                    newTask.TaskName = taskName;
+                    newTask.PluginName = plugin.Name;
+                    newEvent.TaskInfo = newTask;
+                    tasks.Add(newEvent);
+                }
+            }
+            return tasks;
         }
     }
 }

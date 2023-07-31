@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
-using JCoreTradeFramework;
 using Newtonsoft.Json;
 using SteamAuth;
 using SteamKit2;
@@ -34,7 +33,6 @@ using System.Windows.Media.Effects;
 using Label = System.Windows.Controls.Label;
 using static SteamKit2.GC.Dota.Internal.CMsgClientToGCIntegrityStatus;
 using System.Windows.Media.Animation;
-using Trade = JCoreTradeFramework.Trade;
 
 namespace JCorePanel
 {
@@ -48,6 +46,7 @@ namespace JCorePanel
         {
             StatusChangedHandler += StatusChange;
             IsInWorkChangedHandler += IsInWorkChanged;
+            ErrorChangedHandler += ErrorChanged;
             WorkStatusChangedHandler += WorkStatusChanged;
             IsInWork = false;
             SetupAction();
@@ -69,6 +68,23 @@ namespace JCorePanel
                         if (child is TextBlock txt && txt.Name.Equals("WorkStatus"))
                         {
                             txt.Text = NewStatus.Length > 17 ? NewStatus.Substring(0, 17) + "..." : NewStatus;
+                            break;
+                        }
+                    }
+                });
+            }
+        }
+        private void ErrorChanged(bool NewStatus)
+        {
+            if (AccountCard.Child is Grid grid)
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    foreach (var child in grid.Children)
+                    {
+                        if (child is System.Windows.Shapes.Rectangle rect && rect.Name.Equals("HoverRectangle"))
+                        {
+                            rect.Fill = NewStatus ? (System.Windows.Media.Brush)new BrushConverter().ConvertFrom("#FF0000") : (System.Windows.Media.Brush)new BrushConverter().ConvertFrom("#3CFF8D");
                             break;
                         }
                     }
@@ -126,7 +142,7 @@ namespace JCorePanel
                                 }
                             }
                         }
-                        
+
                     }
                 });
             }
@@ -135,7 +151,7 @@ namespace JCorePanel
         {
             ActionList.Add(Action);
         }
-        public new void SetPlaceholder(string NewPlaceholder)
+        public void SetPlaceholder(string NewPlaceholder)
         {
             if (AccountCard.Child is Grid grid)
             {
@@ -188,42 +204,11 @@ namespace JCorePanel
                 });
             }
         }
-        public void SetPlaceholderH(string NewPlaceholder)
-        {
-            SetStatus(NewPlaceholder);
-        }
         public void SetupAction()
         {
             ActionList.Clear();
             ActionList.AddRange(PluginsManager.GetActionsFromPlugins(AccountInfo));
             AddAction(new JCAction("UpdateInfo", "Update Info", UpdateInfo));
-        }
-        private async Task SendTradeTestMe(JCSteamAccountInstance CurrectAccount)
-        {
-            List<CSGOItem> Inventory = await Trade.GetCSGOInventoryAsync(CurrectAccount.AccountInfo);
-            List<CSGOItem> Items = new List<CSGOItem>();
-            foreach (var item in Inventory)
-            {
-                if (item.IsTradeble)
-                {
-                    Items.Add(item);
-                }
-            }
-            await Trade.SendTrade(CurrectAccount, "https://steamcommunity.com/tradeoffer/new/?partner=998469634&token=jrMlWy19", Items);
-
-        }
-        private async Task SendTradeJeka(JCSteamAccountInstance CurrectAccount)
-        {
-            List<CSGOItem> Inventory = await Trade.GetCSGOInventoryAsync(CurrectAccount.AccountInfo);
-            List<CSGOItem> Items = new List<CSGOItem>();
-            foreach (var item in Inventory)
-            {
-                if (item.IsTradeble)
-                {
-                    Items.Add(item);
-                }
-            }
-            await Trade.SendTrade(CurrectAccount, "https://steamcommunity.com/tradeoffer/new/?partner=840876954&token=VOba_Z78", Items);
         }
         private async Task UpdateInfo(JCSteamAccountInstance CurrectAccount)
         {
@@ -237,7 +222,6 @@ namespace JCorePanel
             string text = await SteamWeb.GETRequest("https://steamcommunity.com/profiles/" + AccountInfo.MaFile.Session.SteamID.ToString(), AccountInfo.MaFile.Session.GetCookies());
             string nickname = @"<span\s+class=""actual_persona_name"">([^"">]+)</span>";
             AccountCache.Nickname = Regex.Match(text, nickname).Groups[1].Value;
-            //string level = @"<span\s+class=""friendPlayerLevelNum"">([^"">]+)</span>";
             string avatarHalf = @"<div\s+class=""playerAvatarAutoSizeInner"">([\s\S]+)</div>";
             string avatarReg = @"<img\s+src=""([^"">]+)"">";
             if (Regex.Match(text, avatarHalf).Groups[1].Value.Contains("profile_avatar_frame"))
@@ -255,18 +239,6 @@ namespace JCorePanel
             UpdateAccountCardFromCache(AccountCache);
             SetWorkStatus("Completed");
             SetInWork(false);
-            //var profileLevel = Int32.Parse(Regex.Match(text, level).Groups[1].Value);
-
-            /* List<CSGOItem> items = await Trade.GetCSGOInventoryAsync(CurrectAccount);
-
-             List<CSGOItem> itemsToSend = new List<CSGOItem>();
-             foreach (CSGOItem item in items) {
-                 if (item.IsTradeble)
-                 {
-                     itemsToSend.Add(item);
-                 }
-             }
-             await Trade.SendTrade(AccountInfo, "", itemsToSend);*/
         }
 
         public void StartAction(string Name)

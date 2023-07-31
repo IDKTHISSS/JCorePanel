@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="JCorePanel.PluginTaskCard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:JCorePanel"
+             mc:Ignorable="d" Height="34" Margin="0,8,0,0" Width=" 150" >
+    <Grid x:Name="MainGrid">
+        <Border x:Name="LoginBox" Background="#FF242728" CornerRadius="9" Padding="5"   HorizontalAlignment="Center" VerticalAlignment="Center" Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Width}" Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Height}" RenderTransformOrigin="0.5,0.5" Cursor="Hand" MouseDown="LoginBox_MouseDown">
+            <Border.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="-0.075"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Border.RenderTransform>
+            <Grid  VerticalAlignment="Center" Height="32">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="241*" />
+                    <ColumnDefinition Width="9*"/>
+                    <ColumnDefinition Width="0*"/>
+                </Grid.ColumnDefinitions>
+                <Label x:Name="PluginData" HorizontalContentAlignment="Center" FontSize="10" VerticalContentAlignment="Center" Foreground="White" Content="PluginName" HorizontalAlignment="Left" Width="140" Grid.ColumnSpan="3"/>
+
+                <Grid/>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

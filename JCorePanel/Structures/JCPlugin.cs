@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JCorePanelBase;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -21,6 +22,7 @@ namespace JCorePanel
         public string Description;
 
         public Assembly assembly;
+        public List<JCPluginProperty> Properties;
         public bool IsEnabled;
     }
 }

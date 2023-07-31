@@ -10,7 +10,7 @@ namespace JCorePanel
     public struct JCTaskItem
     {
         public string TaskName;
-        public string TaskStatus;
+        public string TaskDescription;
         public List<string> AccountNames;
         public List<JCTask> EventList;
     }

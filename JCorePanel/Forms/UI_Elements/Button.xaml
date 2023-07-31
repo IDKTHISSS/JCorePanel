@@ -4,8 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:JCorePanel"
-             mc:Ignorable="d" 
-             d:DesignHeight="34" d:DesignWidth="162">
+             mc:Ignorable="d" Height="70" Width="183">
     <UserControl.Resources>
         <SolidColorBrush x:Key="DefaultBackgroundBrush" Color="#8A41FB" />
         <SolidColorBrush x:Key="DefaultForegroundBrush" Color="White" />
@@ -14,9 +13,9 @@
     </UserControl.Resources>
 
     <Button x:Name="button" HorizontalAlignment="Left" VerticalAlignment="Top"
-            Width="162" Height="34" Background="{StaticResource DefaultBackgroundBrush}"
+            Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Width}" Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Height}" Background="{StaticResource DefaultBackgroundBrush}"
             Foreground="{StaticResource DefaultForegroundBrush}"
-            BorderBrush="Transparent" BorderThickness="0" Padding="10"
+            BorderBrush="Transparent" BorderThickness="0" 
             FontSize="16" FontWeight="Regular" Grid.RowSpan="2" Cursor="Hand"
             Content="{Binding ButtonText, RelativeSource={RelativeSource AncestorType={x:Type local:Button}}}" Click="button_Click">
         <Button.Template>
@@ -24,7 +23,7 @@
                 <Border x:Name="border" Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="10">
+                        CornerRadius="10" Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Width}" Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Height}" >
                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
 

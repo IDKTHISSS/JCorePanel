@@ -1,10 +1,10 @@
-﻿<UserControl
+﻿<local:BasePopupWindow
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:JCorePanel" x:Class="JCorePanel.AccountInfoWindow"
-             Height="350" Width="417">
+             Height="350" Width="333">
 
-    <Grid Margin="0,0,84,0">
+    <Grid Margin="0,0,0,0">
         <Border CornerRadius="12" BorderThickness="4"  Padding="0" Background="#8A41FB" Margin="0,0,-7,-6" RenderTransformOrigin="0.5,0.5">
             <Border.RenderTransform>
                 <TransformGroup>
@@ -22,7 +22,7 @@
         <Border x:Name="MainWindowXAML" CornerRadius="12" BorderThickness="4"  Padding="0" Background="#111111" Margin="-1,0,-7,-6">
 
             <Grid>
-                <Border x:Name="LoginBox" Background="#FF242728" CornerRadius="9" Padding="5" Margin="0,41,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="200" Height="35" RenderTransformOrigin="0.5,0.5" MouseDown="Border_MouseDown">
+                <Border x:Name="LoginBox" Background="#FF242728" CornerRadius="9" Padding="5" Margin="0,41,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="200" Height="35" RenderTransformOrigin="0.5,0.5" MouseDown="Border_MouseDown" Cursor="Hand">
                     <Border.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -39,7 +39,7 @@
                             <ColumnDefinition Width="0*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Label x:Name="label1_Copy" HorizontalContentAlignment="Center" Grid.Column="1" FontSize="16" Content="Login228" HorizontalAlignment="Left" Margin="6,-3,0,0" VerticalAlignment="Top" Foreground="Gray" Width="175"/>
+                        <Label x:Name="label1_Copy" HorizontalContentAlignment="Center" Grid.Column="1" FontSize="16" Content="Login228" HorizontalAlignment="Left" Margin="6,-3,0,0" VerticalAlignment="Top" Foreground="LightGray" Width="175"/>
 
 
                         <Grid/>
@@ -56,8 +56,8 @@
                     </Label.RenderTransform>
                 </Label>
 
-                <local:Button ButtonText="Save Changes" HorizontalAlignment="Center" Margin="0,251,0,0" VerticalAlignment="Top" ButtonClick="Button_ButtonClick"/>
-                <Border x:Name="PasswordBox" Cursor="Hand" Background="#FF242728" CornerRadius="9" Padding="5" Margin="0,86,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="200" Height="35" RenderTransformOrigin="0.5,0.5" MouseLeftButtonDown="Border_MouseDown_1" MouseRightButtonDown="PasswordBox_MouseRightButtonDown">
+                <local:Button ButtonText="Save Changes" HorizontalAlignment="Center" Margin="0,263,0,0" VerticalAlignment="Top" ButtonClick="Button_ButtonClick" Height="34"/>
+                <Border x:Name="PasswordBox" Cursor="Hand" Background="#FF242728" CornerRadius="9" Padding="5" Margin="0,86,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="200" Height="35" RenderTransformOrigin="0.5,0.5" MouseLeftButtonDown="Border_MouseDown_1" MouseRightButtonDown="PasswordBox_MouseRightButtonDown" >
                     <Border.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -73,7 +73,7 @@
                             <ColumnDefinition Width="9*"/>
                             <ColumnDefinition Width="0*"/>
                         </Grid.ColumnDefinitions>
-                        <Label x:Name="HiddenPassword" FontSize="16" Content="*********" Foreground="Gray" HorizontalContentAlignment="Center" Grid.ColumnSpan="4" Margin="-2,-4,-1,2" />
+                        <Label x:Name="HiddenPassword" FontSize="16" Content="*********" Foreground="LightGray" HorizontalContentAlignment="Center" Grid.ColumnSpan="4" Margin="-2,-4,-1,2" />
                         <TextBox Panel.ZIndex="8" MouseDown="Border_MouseDown_1" x:Name="PasswordTextBox" Visibility="Hidden" Text="MegaPassword" Foreground="White" Tag="Login" Grid.Column="1" VerticalAlignment="Top" BorderThickness="0" Background="Transparent" FontSize="14" TextAlignment="Center" VerticalContentAlignment="Center" Margin="1,-2,-1,0"  Height="27" BorderBrush="{x:Null}" Cursor="Hand" Grid.ColumnSpan="3">
 
                             <TextBox.ContextMenu>
@@ -83,7 +83,7 @@
                         <Grid/>
                     </Grid>
                 </Border>
-                <Border Background="#FF242728" CornerRadius="9" Padding="5" Margin="0,176,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="200" Height="56" RenderTransformOrigin="0.5,0.5" MouseDown="Border_MouseDown_3">
+                <Border Background="#FF242728" CornerRadius="9" Padding="5" Margin="0,176,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="200" Height="56" RenderTransformOrigin="0.5,0.5" MouseDown="Border_MouseDown_3" Cursor="Hand">
                     <Border.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -106,7 +106,7 @@
                         <Grid/>
                     </Grid>
                 </Border>
-                <Border x:Name="GuardBox" Background="#FF242728" CornerRadius="9" Padding="5" Margin="0,131,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="200" Height="35" RenderTransformOrigin="0.5,0.5" MouseDown="Border_MouseDown_2">
+                <Border x:Name="GuardBox" Background="#FF242728" CornerRadius="9" Padding="5" Margin="0,131,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="200" Height="35" RenderTransformOrigin="0.5,0.5" MouseDown="Border_MouseDown_2" Cursor="Hand">
                     <Border.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -136,7 +136,7 @@
                             </ProgressBar.Template>
                         </ProgressBar>
 
-                        <Label x:Name="label1" HorizontalContentAlignment="Center" Grid.Column="1" FontSize="16" Content="F3JPG" HorizontalAlignment="Center" Margin="0,-3,0,0" VerticalAlignment="Top" Foreground="Gray" Grid.ColumnSpan="2" Width="189"/>
+                        <Label x:Name="label1" HorizontalContentAlignment="Center" Grid.Column="1" FontSize="16" Content="F3JPG" HorizontalAlignment="Center" Margin="0,-3,0,0" VerticalAlignment="Top" Foreground="LightGray" Grid.ColumnSpan="2" Width="189"/>
 
                     </Grid>
 
@@ -148,4 +148,4 @@
         </Border>
 
     </Grid>
-</UserControl>
+</local:BasePopupWindow>

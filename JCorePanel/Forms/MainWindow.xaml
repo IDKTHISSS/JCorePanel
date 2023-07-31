@@ -218,14 +218,25 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="TabItem">
+
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
                     </Style>
                 </TabControl.Resources>
                 <TabItem Header="Main">
-                    <Label x:Name="label1" Foreground="White">
-                    </Label>
+                    <Grid>
+                        <Label x:Name="label1" Foreground="#989898" Height="26" Margin="9,483,529,1" MouseDown="label1_MouseDown" Cursor="Hand">
+                            <TextBlock TextDecorations="Underline">Discord: https://discord.gg/cq8RFZ6V</TextBlock>
+                        </Label>
+                        <Label x:Name="label2" Foreground="#989898" Height="26" Margin="310,487,182,5" MouseDown="label2_MouseDown" Cursor="Hand">
+                            <TextBlock TextDecorations="Underline">GitHub: JCorePanel Source Code</TextBlock>
+                        </Label>
+                        <Label x:Name="label3" Foreground="#989898" Height="26" Margin="594,487,24,5" MouseDown="label3_MouseDown" Cursor="Hand">
+                            <TextBlock TextDecorations="Underline">Support me with skins</TextBlock>
+                        </Label>
+                    </Grid>
+
                 </TabItem>
                 <TabItem Header="Accounts">
                     <Grid Margin="0,0,18,0">
@@ -234,19 +245,8 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
 
-                        <Border Grid.Row="0" Background="#242728" CornerRadius="9" Padding="5" Margin="13,17,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="531" Height="34" Grid.RowSpan="2">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition />
-                                    <ColumnDefinition Width="0*"/>
-                                </Grid.ColumnDefinitions>
+                        <local:InputBox VerticalContentAlignment="Center" Tag="Search" HorizontalContentAlignment="Center" x:Name="SearchBox" InputText="Search" Width="531" Height="34" Margin="13,17,185,467" Grid.Row="1" TextChanged="InputBox_TextChanged" />
 
-
-                                <TextBox x:Name="SearchAccountBox"  Tag="Search" Grid.Column="1" VerticalAlignment="Center" BorderThickness="0" Background="Transparent" FontSize="16" VerticalContentAlignment="Top" Margin="10,0,10,0" TextAlignment="Center" Height="22" BorderBrush="{x:Null}" GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus" Foreground="Gray" Text="Search" TextChanged="TextBox_TextChanged"/>
-
-                            </Grid>
-                        </Border>
 
 
                         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden" Margin="0,62,-8,0" Grid.Row="1">
@@ -255,7 +255,16 @@
 
                             </UniformGrid>
                         </ScrollViewer>
-                        <local:Button ButtonText="Add Account" ButtonClick="Button_MouseDown" Width="162" Height="34" HorizontalAlignment="Left" Margin="562,17,0,0" Grid.Row="1" VerticalAlignment="Top" />
+                        <local:Button ButtonText="Add Account" ButtonClick="Button_MouseDown" Width="162" Height="34" HorizontalAlignment="Left" Margin="561,17,0,0" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" >
+                            <local:Button.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleY="1"/>
+                                    <SkewTransform/>
+                                    <RotateTransform/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </local:Button.RenderTransform>
+                        </local:Button>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Tasks">
@@ -265,37 +274,10 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
 
-                        <Border Grid.Row="0" Background="#242728" CornerRadius="9" Padding="5" Margin="13,17,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="531" Height="34" Grid.RowSpan="2">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition />
-                                    <ColumnDefinition Width="0*"/>
-                                </Grid.ColumnDefinitions>
+                        <local:InputBox x:Name="SearchTaskBox" Tag="Search" InputText="Search" Width="531" Height="34" Margin="13,17,185,467" Grid.Row="1" TextChanged="SearchTaskBox_TextChanged" />
 
+                        <local:Button Width="162" Height="34" ButtonText="Add Task" Margin="555,17,0,0" VerticalAlignment="Top" Grid.RowSpan="2" ButtonClick="Button_Click" />
 
-                                <TextBox Style="{StaticResource placeHolder}" Tag="Search" Grid.Column="1" VerticalAlignment="Center" BorderThickness="0" Background="Transparent" FontSize="16" VerticalContentAlignment="Top" Margin="10,0,10,0" TextAlignment="Center" Height="22" BorderBrush="{x:Null}"/>
-
-                            </Grid>
-                        </Border>
-
-
-
-                        <Button Content="Add Task" HorizontalAlignment="Left" VerticalAlignment="Top"
-        Width="162" Height="34" Background="#3CFF8D" Foreground="Black" 
-        BorderBrush="Transparent" BorderThickness="0" Padding="10"
-        FontSize="16" FontWeight="Bold" Margin="561,17,0,0" Grid.RowSpan="2" Click="Button_Click">
-                            <Button.Template>
-                                <ControlTemplate TargetType="Button">
-                                    <Border Background="{TemplateBinding Background}"
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="{TemplateBinding BorderThickness}"
-                    CornerRadius="10">
-                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-2,0,0"/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>
 
                         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden" Margin="0,62,-8,0" Grid.Row="1">
                             <UniformGrid x:Name="TasksListGrid" Columns="4" VerticalAlignment="Top" HorizontalAlignment="Center" Width="734">
@@ -312,19 +294,8 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
 
-                        <Border Grid.Row="0" Background="#242728" CornerRadius="9" Padding="5" Margin="13,17,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="713" Height="34" Grid.RowSpan="2">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition />
-                                    <ColumnDefinition Width="0*"/>
-                                </Grid.ColumnDefinitions>
+                        <local:InputBox x:Name="SearchPluginBox" Tag="Search" InputText="Search" Height="34" Width="713" Margin="13,17,3,467" Grid.Row="1" />
 
-                                
-                                <TextBox Style="{StaticResource placeHolder}" Tag="Search" Grid.Column="1" VerticalAlignment="Center" BorderThickness="0" Background="Transparent" FontSize="16" VerticalContentAlignment="Top" Margin="15,0,10,0" TextAlignment="Center" Height="22" BorderBrush="{x:Null}"/>
-
-                            </Grid>
-                        </Border>
 
 
                         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden" Margin="0,62,-8,0" Grid.Row="1">

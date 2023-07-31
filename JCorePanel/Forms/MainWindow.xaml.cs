@@ -1,6 +1,7 @@
 ﻿using JCorePanel.Classes.Managers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -23,23 +24,26 @@ namespace JCorePanel
     /// </summary>
     public partial class MainWindow : Window
     {
-        private bool SearchIsFocused = false;
         public MainWindow()
         {
             InitializeComponent();
+            ConfigMenager.LoadSettings();
+            GlobalMenager.Setup();
             Canvas.SetTop(PageRect, 0);
-            SelectPage(0);
+            PageRect.Margin = new Thickness(13, 28, 0, 0);
+            SelectPage(0, 0);
             foreach (var plugin in PluginsManager.GetAllPlugins())
             {
                 PluginsListGrid.Children.Add(UI_Menager.GeneratePluginCard(plugin));
             }
-
-            foreach (var task in TaskManager.GetAllTasks())
-            {
-                TasksListGrid.Children.Add(UI_Menager.GenerateTaskCard(task));
-            }
             AccountMenager.LoadAccounts();
             LoadAccounts();
+
+            TaskManager.LoadTasks();
+            foreach (var task in TaskManager.TaskList)
+            {
+                TasksListGrid.Children.Add(new TaskCard(task));
+            }
 
         }
 
@@ -61,21 +65,18 @@ namespace JCorePanel
             }
 
         }
-        private void SelectPage(int index)
+        private void SelectPage(int index, double time = 0.3)
         {
-            MoveRectangle((index - JCorePanelPages.SelectedIndex)*50, 28 + (index * 50));
+            MoveRectangle((index - JCorePanelPages.SelectedIndex)*50, 28 + (index * 50), time);
             JCorePanelPages.SelectedIndex = index;
-            SearchAccountBox.Focusable = false;
-            Keyboard.ClearFocus();
-            SearchAccountBox.Focusable = true;
         }
-        private void MoveRectangle(int posche,int new_y)
+        private void MoveRectangle(int posche,int new_y, double time = 0.3)
         {
             
             DoubleAnimation a = new DoubleAnimation();
             a.From = Canvas.GetTop(PageRect);
             a.To = posche;
-            a.Duration = new Duration(TimeSpan.FromSeconds(0.3));
+            a.Duration = new Duration(TimeSpan.FromSeconds(time));
             a.FillBehavior = FillBehavior.Stop;
 
             Storyboard.SetTargetProperty(a, new PropertyPath(Canvas.TopProperty));
@@ -146,7 +147,7 @@ namespace JCorePanel
         }
         private void LoadAccounts()
         {
-            foreach (var account in GlobalVars.AccountsList)
+            foreach (var account in AccountMenager.AccountsList)
             {
                 Border border = UI_Menager.GenerateAccountCard(account);
                 account.AccountCard = border;
@@ -171,35 +172,11 @@ namespace JCorePanel
             BitmapImage bitmap = new BitmapImage(imageUri);
             image1.Source = bitmap;
         }
-        
-        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox instance = (TextBox)sender;
-            if (instance.Text == "Search")
-            {
-                SearchIsFocused = true;
-                instance.Foreground = Brushes.White;
-                instance.Text = "";
-            }
-
-        }
-
-        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox instance = (TextBox)sender;
-            if (string.IsNullOrWhiteSpace(instance.Text))
-            {
-                SearchIsFocused = false;
-                instance.Foreground = Brushes.Gray;
-                instance.Text = "Search";
-                CancelSearchAccount();
-            }
-                
-        }
+       
         private void CancelSearchAccount()
         {
             AccountsListGrid.Children.Clear();
-            foreach (var account in GlobalVars.AccountsList)
+            foreach (var account in AccountMenager.AccountsList)
             {
                 AccountsListGrid.Children.Add(account.AccountCard);
             }
@@ -207,23 +184,7 @@ namespace JCorePanel
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            string TextToSearch = ((TextBox)sender).Text;
-            if (TextToSearch == "")
-            {
-                CancelSearchAccount();
-                return;
-            }
-            if (!SearchIsFocused) return;
-            AccountsListGrid.Children.Clear();
-            foreach (var account in GlobalVars.AccountsList)
-            {
-                if (account.AccountInfo.Login.ToLower().Contains(TextToSearch.ToLower()) ||
-                    account.AccountInfo.MaFile.Session.SteamID.ToString().Contains(TextToSearch) ||
-                    account.AccountCache.Nickname.ToLower().Contains(TextToSearch.ToLower()))
-                {
-                    AccountsListGrid.Children.Add(account.AccountCard);
-                }
-            }
+            
         }
 
         private void Button_MouseDown(object sender, EventArgs e)
@@ -269,11 +230,87 @@ namespace JCorePanel
                 }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            UI_Menager.ShowDialogConfirm("Its plugin mark as virus. Do you need enable this plugin?", (result) => { });
 
-            
+        private void InputBox_TextChanged(string TextToSearch)
+        {
+            if (TextToSearch == "")
+            {
+                CancelSearchAccount();
+                return;
+            }
+            AccountsListGrid.Children.Clear();
+            foreach (var account in AccountMenager.AccountsList)
+            {
+                if (account.AccountInfo.Login.ToLower().Contains(TextToSearch.ToLower()) ||
+                    account.AccountInfo.MaFile.Session.SteamID.ToString().Contains(TextToSearch) ||
+                    account.AccountCache.Nickname.ToLower().Contains(TextToSearch.ToLower()))
+                {
+                    AccountsListGrid.Children.Add(account.AccountCard);
+                }
+            }
+        }
+
+        private void SearchTaskBox_TextChanged(string TextToSearch)
+        {
+            if (TextToSearch == "")
+            {
+                TasksListGrid.Children.Clear();
+                foreach (var task in TaskManager.TaskList)
+                {
+                    TasksListGrid.Children.Add(task.TaskCard);
+                }
+                return;
+            }
+            TasksListGrid.Children.Clear();
+            foreach (var task in TaskManager.TaskList)
+            {
+                if (task.TaskItem.TaskName.ToLower().Contains(TextToSearch.ToLower()))
+                {
+                    TasksListGrid.Children.Add(task.TaskCard);
+                }
+            }
+        }
+
+        private void SearchPluginBox_TextChanged(string TextToSearch)
+        {
+            PluginsListGrid.Children.Clear();
+            if (TextToSearch == "")
+            {
+                foreach (var plugin in PluginsManager.PluginsList)
+                {
+                    PluginsListGrid.Children.Add(UI_Menager.GeneratePluginCard(plugin));
+                }
+                return;
+            }
+            foreach (var plugin in PluginsManager.PluginsList)
+            {
+                if (plugin.Name.ToLower().Contains(TextToSearch.ToLower()) ||
+                    plugin.FrendlyName.ToLower().Contains(TextToSearch.ToLower()) ||
+                    plugin.Hash.ToLower() == TextToSearch.ToLower())
+                {
+                    PluginsListGrid.Children.Add(UI_Menager.GeneratePluginCard(plugin));
+                }
+            }
+        }
+
+        private void Button_Click(object sender, EventArgs e)
+        {
+            Utils.ShowPopupWindow(new AddTaskWindow());
+        }
+
+        private void label1_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Process.Start("https://discord.gg/cq8RFZ6V");
+        }
+
+        private void label3_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Process.Start("https://steamcommunity.com/tradeoffer/new/?partner=998469634&token=jrMlWy19");
+        }
+
+        private void label2_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Process.Start("https://github.com/IDKTHISSS/JCorePanel");
         }
     }
 }

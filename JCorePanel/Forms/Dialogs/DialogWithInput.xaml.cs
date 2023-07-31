@@ -17,7 +17,7 @@ namespace JCorePanel
     /// <summary>
     /// Логика взаимодействия для DialogWithInput.xaml
     /// </summary>
-    public partial class DialogWithInput : UserControl
+    public partial class DialogWithInput : BasePopupWindow
     {
         public string Messege;
         public Action<string> OnCloseDialog;
@@ -57,10 +57,12 @@ namespace JCorePanel
         {
             if(InputBox.Foreground == Brushes.Gray)
             {
+                OnWindowClose();
                 OnCloseDialog(null);
             }
             else
             {
+                OnWindowClose();
                 OnCloseDialog(InputBox.Text);
             }
         }

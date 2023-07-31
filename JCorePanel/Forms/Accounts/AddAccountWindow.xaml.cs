@@ -22,9 +22,8 @@ namespace JCorePanel
     /// <summary>
     /// Логика взаимодействия для AddAccountWindow.xaml
     /// </summary>
-    public partial class AddAccountWindow : UserControl
+    public partial class AddAccountWindow : BasePopupWindow
     {
-        public Action OnWindowClose;
         private bool PasswordIsFocused = false;
         private string Password = "";
         SteamGuardAccount SteamGuardAccount = null;
@@ -64,8 +63,12 @@ namespace JCorePanel
                 // Проверяем формат файла
                 if (fileExtension == ".maFile")
                 {
-                    // Файл имеет поддерживаемый формат
-                    Console.WriteLine(filePath);
+                    SteamGuardAccount = JsonConvert.DeserializeObject<SteamGuardAccount>(File.ReadAllText(filePath));
+                    MaFileTextBox.Text = SteamGuardAccount.Session.SteamID.ToString();
+                    LoginTextBox.Text = SteamGuardAccount.AccountName;
+                    LoginTextBox.IsEnabled = false;
+                    LoginTextBox.Foreground = Brushes.White;
+                    LoginBox.Cursor = Cursors.No;
                 }
                 else
                 {
@@ -137,7 +140,7 @@ namespace JCorePanel
                 LoginTextBox.Text = SteamGuardAccount.AccountName;
                 LoginTextBox.IsEnabled = false;
                 LoginTextBox.Foreground = Brushes.White;
-                LoginTextBox.Cursor = Cursors.No;
+                LoginBox.Cursor = Cursors.No;
                 //openFileDialog1.FileName;
             }
         }
@@ -178,6 +181,11 @@ namespace JCorePanel
                 newSteamAccount.MaFile = SteamGuardAccount;
             }
             AccountMenager.AddAcount(newSteamAccount);
+        }
+
+        private void Border_Drop_1(object sender, DragEventArgs e)
+        {
+
         }
     }
 }

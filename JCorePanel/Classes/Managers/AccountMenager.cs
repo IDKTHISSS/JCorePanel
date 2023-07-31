@@ -14,7 +14,7 @@ namespace JCorePanel
 {
     public static class AccountMenager
     {
-
+        public static List<AccountInstance> AccountsList = new List<AccountInstance>();
         public static void LoadAccounts()
         {
             Logger.Log("Loading all accounts");
@@ -34,7 +34,7 @@ namespace JCorePanel
                             AccountInstance account = new AccountInstance();
                             account.AccountInfo = steamAccount;
                             account.AccountCache = LoadCache(steamAccount);
-                            GlobalVars.AccountsList.Add(account);
+                            AccountMenager.AccountsList.Add(account);
                             Logger.Log($"Account: {steamAccount.Login} was successful loaded.");
 
                         }
@@ -103,9 +103,9 @@ namespace JCorePanel
             MainWindow mainWindow = System.Windows.Application.Current.MainWindow as MainWindow;
             Border border = UI_Menager.GenerateAccountCard(account);
             account.AccountCard = border;
-            GlobalVars.AccountsList.Add(account);
+            AccountsList.Add(account);
             mainWindow.AccountsListGrid.Children.Clear();
-            foreach(var acc in GlobalVars.AccountsList)
+            foreach(var acc in AccountsList)
             {
                 mainWindow.AccountsListGrid.Children.Add(acc.AccountCard);
             }
@@ -139,7 +139,7 @@ namespace JCorePanel
                     }
                 }
             }
-            foreach(var account in GlobalVars.AccountsList)
+            foreach(var account in AccountsList)
             {
                 if(account.AccountInfo.Login.ToLower() ==  Account.Login.ToLower()) {
                     account.AccountInfo = Account;

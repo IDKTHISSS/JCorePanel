@@ -1,7 +1,8 @@
-﻿<UserControl
+﻿<local:BasePopupWindow
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:JCorePanel" x:Class="JCorePanel.PluginInfo"
+             
              Height="445" Width="509">
 
     <Grid>
@@ -101,4 +102,4 @@
         </Border>
 
     </Grid>
-</UserControl>
+</local:BasePopupWindow>

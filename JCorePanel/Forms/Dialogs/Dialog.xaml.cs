@@ -17,9 +17,8 @@ namespace JCorePanel
     /// <summary>
     /// Логика взаимодействия для Dialog.xaml
     /// </summary>
-    public partial class Dialog : UserControl
+    public partial class Dialog : BasePopupWindow
     {
-        public Action OnWindowClose;
         public Dialog(string Messege)
         {
             InitializeComponent();

@@ -275,8 +275,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\JCEventInstance.cs" />
+    <Compile Include="Classes\Managers\ConfigMenager.cs" />
+    <Compile Include="Classes\JCConfig.cs" />
     <Compile Include="Classes\Managers\PluginsManager.cs" />
     <Compile Include="Classes\Managers\TaskManager.cs" />
+    <Compile Include="Classes\TaskInstance.cs" />
     <Compile Include="Classes\Utils\Utils.cs" />
     <Compile Include="Forms\Accounts\AccountInfoWindow.xaml.cs">
       <DependentUpon>AccountInfoWindow.xaml</DependentUpon>
@@ -284,6 +288,7 @@
     <Compile Include="Forms\Accounts\AddAccountWindow.xaml.cs">
       <DependentUpon>AddAccountWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\BaseWindow\BasePopupWindow.cs" />
     <Compile Include="Forms\Dialogs\Dialog.xaml.cs">
       <DependentUpon>Dialog.xaml</DependentUpon>
     </Compile>
@@ -293,18 +298,77 @@
     <Compile Include="Forms\Dialogs\DialogWithInput.xaml.cs">
       <DependentUpon>DialogWithInput.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Plugins\Cards\PluginPropertyCard.xaml.cs">
+      <DependentUpon>PluginPropertyCard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Plugins\EditPluginPropertyWindow.xaml.cs">
+      <DependentUpon>EditPluginPropertyWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Plugins\PluginInfo.xaml.cs">
       <DependentUpon>PluginInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Plugins\PluginPropertySettings.xaml.cs">
+      <DependentUpon>PluginPropertySettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Tasks\AccountListTaskWindow.xaml.cs">
+      <DependentUpon>AccountListTaskWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Tasks\AddAccountToTaskWindow.xaml.cs">
+      <DependentUpon>AddAccountToTaskWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Tasks\AddEventToTaskWindow.xaml.cs">
+      <DependentUpon>AddEventToTaskWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Tasks\Cards\PropertyItemCard.xaml.cs">
+      <DependentUpon>PropertyItemCard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Tasks\Cards\EventItemCard.xaml.cs">
+      <DependentUpon>EventItemCard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Tasks\Cards\EventTaskCard.xaml.cs">
+      <DependentUpon>EventTaskCard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Tasks\Cards\PluginTaskCard.xaml.cs">
+      <DependentUpon>PluginTaskCard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Tasks\Cards\TaskCard.xaml.cs">
+      <DependentUpon>TaskCard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Tasks\EditTaskPropertyWindow.xaml.cs">
+      <DependentUpon>EditTaskPropertyWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Tasks\TaskEventListWindow.xaml.cs">
+      <DependentUpon>TaskEventListWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Tasks\TaskInfoWindow.xaml.cs">
+      <DependentUpon>TaskInfoWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Tasks\AddTaskWindow.xaml.cs">
+      <DependentUpon>AddTaskWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Tasks\TaskPropertyListWindow.xaml.cs">
+      <DependentUpon>TaskPropertyListWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Tasks\TaskSettingsWindow.xaml.cs">
+      <DependentUpon>TaskSettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\UI_Elements\Button.xaml.cs">
       <DependentUpon>Button.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\UI_Elements\InputBox.xaml.cs">
+      <DependentUpon>InputBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\UI_Elements\MultiLineTextInput.xaml.cs">
+      <DependentUpon>MultiLineTextInput.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GlobalMenager.cs" />
     <Compile Include="Resource1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource1.resx</DependentUpon>
     </Compile>
     <Compile Include="Structures\JCPlugin.cs" />
+    <Compile Include="Structures\JCPluginRef.cs" />
     <Compile Include="Structures\JCTaskItem.cs" />
     <Page Include="Forms\Accounts\AccountInfoWindow.xaml">
       <SubType>Designer</SubType>
@@ -343,7 +407,75 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Forms\Plugins\Cards\PluginPropertyCard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\Plugins\EditPluginPropertyWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\Plugins\PluginInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\Plugins\PluginPropertySettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\Tasks\AccountListTaskWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\Tasks\AddAccountToTaskWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\Tasks\AddEventToTaskWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\Tasks\Cards\PropertyItemCard.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Forms\Tasks\Cards\EventItemCard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\Tasks\Cards\EventTaskCard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\Tasks\Cards\PluginTaskCard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\Tasks\Cards\TaskCard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\Tasks\EditTaskPropertyWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\Tasks\TaskEventListWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\Tasks\TaskInfoWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\Tasks\AddTaskWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Forms\Tasks\TaskPropertyListWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\Tasks\TaskSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -351,9 +483,16 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Forms\UI_Elements\InputBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\UI_Elements\MultiLineTextInput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GlobalVars.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -430,6 +569,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Icons\PowerOffGreen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\Plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Icons\Stop.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.6.5.5\build\Fody.targets" Condition="Exists('..\packages\Fody.6.5.5\build\Fody.targets')" />
