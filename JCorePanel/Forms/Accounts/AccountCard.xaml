@@ -1,0 +1,82 @@
+﻿<UserControl x:Class="JCorePanel.AccountCard"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:JCorePanel"
+        mc:Ignorable="d"
+        Height="75" Width="163"
+             Margin="0,10,0,5" Loaded="UserControl_Loaded"
+             >
+    <UserControl.Resources>
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="#242728" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="Width" Value="163" />
+            <Setter Property="Height" Value="75
+                    " />
+
+        </Style>
+        
+    </UserControl.Resources>
+    <Border Style="{StaticResource CardStyle}" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="75"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border x:Name="ImageBorder" CornerRadius="9" Margin="5, 5, 2, 5">
+                <Border.Effect>
+                    <BlurEffect Radius="0"/>
+                </Border.Effect>
+                <Border.Background>
+                    <ImageBrush Stretch="Fill">
+                        <ImageBrush.ImageSource>
+                            <BitmapImage UriSource="{Binding AccountCache.AvatarURL, 
+                                        FallbackValue='https://avatars.cloudflare.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg'}" />
+                        </ImageBrush.ImageSource>
+                    </ImageBrush>
+                </Border.Background>
+            </Border>
+
+            <Grid x:Name="InfoGrid" HorizontalAlignment="Left" Grid.Column="1">
+                <Label x:Name="TitleLabel" Content="{Binding AccountCache.Nickname, FallbackValue='Name'}" Foreground="White" Margin="0,10,0,42" HorizontalAlignment="Center" Width="88">
+                    <Label.Effect>
+                        <BlurEffect Radius="0"/>
+                    </Label.Effect>
+                </Label>
+                <Label x:Name="LoginLabel" Content="{Binding AccountInfo.Login, FallbackValue='login'}" Foreground="Gray" Margin="0,24,0,23" FontSize="9" HorizontalAlignment="Left" Width="78">
+                    <Label.Effect>
+                        <BlurEffect Radius="0"/>
+                    </Label.Effect>
+                </Label>
+                <Label x:Name="PlaceholderLabel" Content="#Placeholder" Foreground="#8A41FB" Margin="0, 38, -10, 10" HorizontalAlignment="Left">
+                    <Label.Effect>
+                        <BlurEffect Radius="0"/>
+                    </Label.Effect>
+                </Label>
+
+                <Rectangle x:Name="HoverRectangle" RadiusX="9" RadiusY="9" Opacity="0" Height="75" Margin="-75,0,0,0" VerticalAlignment="Center">
+                    <Rectangle.Fill>
+                        <SolidColorBrush Color="#FF3CFF8D"/>
+                    </Rectangle.Fill>
+                </Rectangle>
+
+                <Image x:Name="InfoButtonImage" Source="/Images/Icons/Info.png" Margin="50, 10, 5, 51" Width="12" Height="12" Cursor="Hand" Opacity="0" MouseLeftButtonDown="InfoButtonImage_MouseDown">
+
+                </Image>
+                <Image x:Name="QuickActionButtonImage" Source="/Images/Icons/3_Dots.png" Margin="51, 58, 14, 10" Width="15" Height="12" Cursor="Hand" Opacity="0" MouseDown="QuickActionButtonImage_MouseDown">
+
+                </Image>
+            </Grid>
+
+            <Image x:Name="WorkAnimation" Width="40" Height="40" Opacity="0"  Source="/Resources/Loading.png" >
+
+            </Image>
+
+            <TextBlock x:Name="WorkStatus" VerticalAlignment="Center" Text="Example" Foreground="White" FontSize="11" Opacity="0" Margin="60,17,0,17" Grid.ColumnSpan="2"/>
+        </Grid>
+    </Border>
+
+</UserControl>

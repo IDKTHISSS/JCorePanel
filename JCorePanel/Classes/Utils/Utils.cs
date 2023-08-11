@@ -28,8 +28,24 @@ namespace JCorePanel
 
         public static List<JCSteamAccountInstance> GetAccountsFromLogins(List<string> logins)
         {
-            if(logins == null) return new List<JCSteamAccountInstance>();
+            if (logins == null) return new List<JCSteamAccountInstance>();
             var accounts = new List<JCSteamAccountInstance>();
+            foreach (var acc in AccountMenager.AccountsList)
+            {
+                foreach (var log in logins)
+                {
+                    if (log == acc.AccountInfo.Login)
+                    {
+                        accounts.Add(acc);
+                    }
+                }
+            }
+            return accounts;
+        }
+        public static List<AccountInstance> GetAccountInstancesFromLogins(List<string> logins)
+        {
+            if (logins == null) return new List<AccountInstance>();
+            var accounts = new List<AccountInstance>();
             foreach (var acc in AccountMenager.AccountsList)
             {
                 foreach (var log in logins)
@@ -124,45 +140,49 @@ namespace JCorePanel
         }
         public static void ShowPopupWindow(BasePopupWindow popupWindow)
         {
-            var grid = (Application.Current.MainWindow as MainWindow).MainWindowXAML.Child as Grid;
-            grid.Children.Add(popupWindow);
-            Grid.SetColumn(popupWindow, 1);
-            popupWindow.VerticalAlignment = VerticalAlignment.Center;
-            popupWindow.HorizontalAlignment = HorizontalAlignment.Center;
-            popupWindow.Margin = new Thickness(0, 0, 0, 0);
-            Grid.SetRowSpan(popupWindow, 2);
+            Application.Current.Dispatcher.Invoke(() => {
+                var grid = (Application.Current.MainWindow as MainWindow).MainWindowXAML.Child as Grid;
+                grid.Children.Add(popupWindow);
+                Grid.SetColumn(popupWindow, 1);
+                popupWindow.VerticalAlignment = VerticalAlignment.Center;
+                popupWindow.HorizontalAlignment = HorizontalAlignment.Center;
+                popupWindow.Margin = new Thickness(0, 0, 0, 0);
+                Grid.SetRowSpan(popupWindow, 2);
 
-            popupWindow.Visibility = Visibility.Visible;
+                popupWindow.Visibility = Visibility.Visible;
 
-            if ((Application.Current.MainWindow as MainWindow).MainWindowXAML.Child is Grid grid222)
-                foreach (var child in grid222.Children)
-                {
-                    if (!(child is BasePopupWindow window) && child != popupWindow)
+                if ((Application.Current.MainWindow as MainWindow).MainWindowXAML.Child is Grid grid222)
+                    foreach (var child in grid222.Children)
                     {
-                        if (child is FrameworkElement cont)
+                        if (!(child is BasePopupWindow window) && child != popupWindow)
                         {
-                            BlurEffect blurEffect = new BlurEffect();
-                            blurEffect.Radius = 5;
-                            cont.Effect = blurEffect;
-                            cont.IsEnabled = false;
+                            if (child is FrameworkElement cont)
+                            {
+                                BlurEffect blurEffect = new BlurEffect();
+                                blurEffect.Radius = 5;
+                                cont.Effect = blurEffect;
+                                cont.IsEnabled = false;
+                            }
                         }
                     }
-                }
-            popupWindow.OnWindowClose += () => {
-                popupWindow.Visibility = Visibility.Collapsed;
-                foreach (var child in ((Application.Current.MainWindow as MainWindow).MainWindowXAML.Child as Grid).Children)
-                {
-                    if (!(child is BasePopupWindow window))
+                popupWindow.OnWindowClose += () => {
+                    popupWindow.Visibility = Visibility.Collapsed;
+                    foreach (var child in ((Application.Current.MainWindow as MainWindow).MainWindowXAML.Child as Grid).Children)
                     {
-                        if (child is FrameworkElement cont)
+                        if (!(child is BasePopupWindow window))
                         {
-                            cont.Effect = null;
-                            cont.IsEnabled = true;
+                            if (child is FrameworkElement cont)
+                            {
+                                cont.Effect = null;
+                                cont.IsEnabled = true;
+                            }
                         }
                     }
-                }
-                popupWindow = null;
-            };
+                    popupWindow = null;
+                };
+
+            });
+            
         }
         public static AccountInstance GetAccountBySteamAccount(JCSteamAccountInstance account)
         {

@@ -12,7 +12,7 @@
         AllowsTransparency="True"
         Background="Transparent"
         MouseDown="Window_MouseDown"
-        Title="MainWindow" Height="530" Width="930" LocationChanged="Window_LocationChanged">
+        Title="JCorePanel" Height="530" Width="930" LocationChanged="Window_LocationChanged">
     <Window.Resources>
         <Style TargetType="Button" x:Key="RoundButton">
             <Style.Resources>
@@ -135,69 +135,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="placeHolder" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-            <Setter Property="Foreground" Value="White"/>
-
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type TextBox}">
-                        <Grid>
-                            <Border x:Name="border"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"/>
-                            <ScrollViewer x:Name="PART_ContentHost" Background="Transparent"/>
-                            <TextBlock x:Name="placeholderText"
-                               Text="{TemplateBinding Tag}"
-                               Foreground="Gray"
-                               Margin="0,-2,0,0"
-                               VerticalAlignment="Center"
-                               Padding="5,0"
-                               IsHitTestVisible="False"/>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="border" Property="Opacity" Value="0.56"/>
-                            </Trigger>
-                            <MultiTrigger>
-                                <MultiTrigger.Conditions>
-                                    <Condition Property="IsKeyboardFocused" Value="False"/>
-                                </MultiTrigger.Conditions>
-                                <Setter TargetName="placeholderText" Property="Visibility" Value="Visible"/>
-                            </MultiTrigger>
-                            <Trigger Property="IsKeyboardFocused" Value="True">
-                                <Setter TargetName="placeholderText" Property="Visibility" Value="Collapsed"/>
-                            </Trigger>
-                            <Trigger Property="Text" Value="{x:Null}">
-                                <Setter TargetName="placeholderText" Property="Foreground" Value="Green"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <ControlTemplate x:Key="CustomScrollBar" TargetType="{x:Type ScrollBar}">
-            <Grid Background="Transparent">
-                <Border x:Name="PART_Background"
-                Background="Transparent"
-                CornerRadius="10"
-                BorderThickness="0" />
-
-                <Track x:Name="PART_Track"
-               IsDirectionReversed="False">
-                    <Track.Thumb>
-                        <Thumb x:Name="PART_Thumb"
-                       Background="LightGray"
-                       BorderBrush="DarkGray"
-                       BorderThickness="1"
-                       Height="20"
-                       Width="10"/>
-                    </Track.Thumb>
-                </Track>
-            </Grid>
-        </ControlTemplate>
-
     </Window.Resources>
     <Border x:Name="MainWindowXAML" CornerRadius="12" BorderThickness="4"  Padding="0" Background="#111">
 
@@ -211,7 +148,7 @@
                 <ColumnDefinition Width="377*"/>
             </Grid.ColumnDefinitions>
             <Image x:Name="image" HorizontalAlignment="Left" Height="50" VerticalAlignment="Center" Width="38" Grid.Column="0" Source="/Images/Icons/Logo.png" Margin="54,0,0,0"/>
-            <Rectangle HorizontalAlignment="Left" Height="524" Margin="148,-1,0,0" VerticalAlignment="Top" Width="3" Fill="#FF242728" Grid.RowSpan="2"/>
+            <Rectangle HorizontalAlignment="Left" Height="524" Margin="148,0,0,0" VerticalAlignment="Top" Width="3" Fill="#FF242728" Grid.RowSpan="2"/>
             <TabControl x:Name="JCorePanelPages" Padding="0,0,0,0" Margin="4,2,10,0" Grid.RowSpan="2" BorderThickness="0" Background="{x:Null}" Grid.Column="1" BorderBrush="{x:Null}">
                 <TabControl.Resources>
                     <Style TargetType="TabItem">
@@ -226,8 +163,9 @@
                 </TabControl.Resources>
                 <TabItem Header="Main">
                     <Grid>
+                        <Label Content="Changelog" Foreground="White" FontSize="20" Margin="10,10,622,468"/>
                         <Label x:Name="label1" Foreground="#989898" Height="26" Margin="9,483,529,1" MouseDown="label1_MouseDown" Cursor="Hand">
-                            <TextBlock TextDecorations="Underline">Discord: https://discord.gg/cq8RFZ6V</TextBlock>
+                            <TextBlock TextDecorations="Underline">Discord: https://discord.gg/Nuc9DC5P</TextBlock>
                         </Label>
                         <Label x:Name="label2" Foreground="#989898" Height="26" Margin="310,487,182,5" MouseDown="label2_MouseDown" Cursor="Hand">
                             <TextBlock TextDecorations="Underline">GitHub: JCorePanel Source Code</TextBlock>
@@ -235,6 +173,11 @@
                         <Label x:Name="label3" Foreground="#989898" Height="26" Margin="594,487,24,5" MouseDown="label3_MouseDown" Cursor="Hand">
                             <TextBlock TextDecorations="Underline">Support me with skins</TextBlock>
                         </Label>
+                        <Label x:Name="VersionData" Content="1.0.0" Foreground="#3CFF8D" FontSize="14" Margin="10,38,622,445"/>
+                        <Label x:Name="DateData" Content="31.07.2023" Foreground="#989898" FontSize="14" Margin="10,60,622,423"/>
+                        <TextBlock x:Name="ChangeLogData" FontSize="14" Margin="10,100,24,36" Foreground="White"/>
+
+
                     </Grid>
 
                 </TabItem>
@@ -294,7 +237,7 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
 
-                        <local:InputBox x:Name="SearchPluginBox" Tag="Search" InputText="Search" Height="34" Width="713" Margin="13,17,3,467" Grid.Row="1" />
+                        <local:InputBox x:Name="SearchPluginBox" Tag="Search" InputText="Search" Height="34" Width="713" Margin="13,17,3,467" Grid.Row="1" TextChanged="SearchPluginBox_TextChanged" />
 
 
 
@@ -308,8 +251,16 @@
                     <!-- Содержимое вкладки 3 -->
                 </TabItem>
                 <TabItem Header="Settings">
-                    <Label x:Name="label4" Content="Settings"  Foreground="White"/>
-                    <!-- Содержимое вкладки 3 -->
+                    <Grid Margin="0,0,1,0">
+                        <Rectangle Fill="#242728" RadiusX="9" RadiusY="9" Margin="22,45,22,425"/>
+
+                        <Label Content="Steam Path:" VerticalContentAlignment="Center" Foreground="White" FontSize="16" Margin="41,45,588,428"/>
+                        <Label x:Name="SettingsSteamPath" AllowDrop="True" Content="Steam Path:" VerticalContentAlignment="Center" Foreground="#989898" FontSize="16" Margin="138,45,37,428" MouseDown="SettingsSteamPath_MouseDown" DragEnter="SettingsSteamPath_DragEnter" Drop="SettingsSteamPath_Drop"/>
+                        <Rectangle Fill="#242728" RadiusX="9" RadiusY="9" Margin="22,115,461,355"/>
+                        <ToggleButton x:Name="SettingsDeveloperMode" Cursor="Hand" Content="Some Text" Margin="186,129,520,369" Click="SettingsDeveloperMode_Click"/>
+                        <Label Content="Developer Mode" VerticalContentAlignment="Center" Foreground="White" FontSize="16" Margin="41,115,572,357"/>
+                    </Grid>
+
                 </TabItem>
 
 
@@ -324,7 +275,7 @@
             <Label x:Name="label_Copy1" Content="Tasks" HorizontalAlignment="Left" Margin="45,129,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="White" FontSize="20" MouseDown="label_Copy1_MouseDown" Cursor="Hand" MouseLeave="label_Copy_MouseLeave" MouseEnter="label_Copy_MouseEnter"/>
             <Label x:Name="label_Copy2" Content="Plugins" HorizontalAlignment="Left" Margin="36,179,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="White" FontSize="20" MouseDown="label_Copy2_MouseDown" Cursor="Hand" MouseLeave="label_Copy_MouseLeave" MouseEnter="label_Copy_MouseEnter"/>
             <Label x:Name="label_Copy32" Content="Settings" HorizontalAlignment="Left" Margin="32,229,0,0" Grid.Row="1" VerticalAlignment="Top" Foreground="White" FontSize="20" MouseDown="label_Copy2_MouseDown_1" Cursor="Hand" MouseLeave="label_Copy_MouseLeave" MouseEnter="label_Copy_MouseEnter"/>
-            <Image x:Name="image1" HorizontalAlignment="Left" Height="22" Margin="60,342,0,0" Grid.Row="1" VerticalAlignment="Top" Width="22" Source="/Images/Icons/PowerOff.png" Cursor="Hand" MouseDown="image1_MouseDown" MouseEnter="image1_MouseEnter" MouseLeave="image1_MouseLeave" />
+            <Image x:Name="image1" HorizontalAlignment="Left" Height="22" Margin="60,342,0,0" Grid.Row="1" VerticalAlignment="Top" Width="22" Source="/Images/Icons/PowerOff.png" Cursor="Hand" MouseEnter="image1_MouseEnter" MouseLeave="image1_MouseLeave" MouseLeftButtonDown="image1_MouseDown" MouseRightButtonDown="image1_MouseRightButtonDown" />
 
         </Grid>
     </Border>

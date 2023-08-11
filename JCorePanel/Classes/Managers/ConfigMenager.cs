@@ -1,4 +1,5 @@
 ﻿using JCorePanelBase;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -16,6 +17,7 @@ namespace JCorePanel
 
         public static void LoadSettings()
         {
+            PanelConfig.SteamPath = (string)Registry.GetValue(@"HKEY_CURRENT_USER\SOFTWARE\Valve\Steam", "SteamExe", "null");
             try
             {
                 string filePath = "Config.json";

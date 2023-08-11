@@ -12,7 +12,5 @@ namespace JCorePanel
         public JCTask TaskInfo;
         public string Name;
         public string Description;
-
-
     }
 }

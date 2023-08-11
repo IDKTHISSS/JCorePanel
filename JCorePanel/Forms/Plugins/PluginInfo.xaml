@@ -33,8 +33,7 @@
                         </TransformGroup>
                     </Label.RenderTransform>
                 </Label>
-                <Label x:Name="label_Copy" Content="Plugin Name" FontSize="20
-                       " HorizontalContentAlignment="Center" HorizontalAlignment="Center" Margin="0,24,0,0" VerticalAlignment="Top" Background="#00989898" Foreground="White" Width="406" Height="41" RenderTransformOrigin="0.5,0.5" Cursor="Arrow">
+                <Label x:Name="label_Copy" Content="Plugin Name" FontSize="20" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Margin="0,24,0,0" VerticalAlignment="Top" Background="#00989898" Foreground="White" Width="406" Height="41" RenderTransformOrigin="0.5,0.5" Cursor="Arrow">
                     <Label.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform ScaleY="1"/>

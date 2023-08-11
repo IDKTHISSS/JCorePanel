@@ -23,7 +23,7 @@
 
             <Grid>
                 
-                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden" Width="470" Margin="20,10,20,99">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden" Width="470" Margin="20,24,20,99">
                     <UniformGrid x:Name="PropreryListGrid" Columns="1" VerticalAlignment="Top" HorizontalAlignment="Center" Width="470"/>
                 </ScrollViewer>
                 <local:Button ButtonText="Save" Height="34" Margin="164,407,164,32" ButtonClick="Button_ButtonClick"/>

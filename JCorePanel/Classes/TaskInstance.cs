@@ -99,6 +99,7 @@ namespace JCorePanel
                             if (math == null)
                             {
                                 Logger.Log($"[{Plugin.Name}] {taskName} not found task body.");
+                                continue;
                             }
                             SetPlaceholder("#"+taskName);
                             math.Invoke(instance, new object[] { AccountList });
@@ -137,7 +138,7 @@ namespace JCorePanel
             if(TaskThread!=null) TaskThread.Suspend();
             SetIsInWork(false);
             
-            SetPlaceholder("#" + "IDLE");
+            SetPlaceholder("#IDLE");
         }
         public void ShowInfo()
         {

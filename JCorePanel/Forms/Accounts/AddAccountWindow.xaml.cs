@@ -181,6 +181,7 @@ namespace JCorePanel
                 newSteamAccount.MaFile = SteamGuardAccount;
             }
             AccountMenager.AddAcount(newSteamAccount);
+            OnWindowClose();
         }
 
         private void Border_Drop_1(object sender, DragEventArgs e)

@@ -37,8 +37,8 @@
                     </Label.Effect>
                 </Label>
             </Grid>
-            <Rectangle x:Name="HoverRectangle" Grid.ColumnSpan="2" RadiusX="9" RadiusY="9"
-                   HorizontalAlignment="Left" Opacity="0" Height="65" Margin="-2,0,0,0"
+            <Rectangle x:Name="HoverRectangle" RadiusX="9" RadiusY="9"
+                   HorizontalAlignment="Left" Opacity="0" Height="65"
                    VerticalAlignment="Center" Width="163">
                 <Rectangle.Fill>
                     <SolidColorBrush Color="#3CFF8D"/>
@@ -79,7 +79,7 @@
                                      To="1" Duration="0:0:0.2"/>
                         <DoubleAnimation Storyboard.TargetName="WorkStatus" Storyboard.TargetProperty="Opacity"
                                      To="1" Duration="0:0:0.2"/>
-                        
+
                         <DoubleAnimation Storyboard.TargetName="TitleLabel" Storyboard.TargetProperty="Effect.Radius"
                                      To="5" Duration="0:0:0.2"/>
                         <DoubleAnimation Storyboard.TargetName="PlaceholderLabel" Storyboard.TargetProperty="Effect.Radius"

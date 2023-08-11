@@ -30,24 +30,22 @@ namespace JCorePanel
             }
             PluginStatusList = LoadAllStatus();
             string[] dllFiles = Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins"), "*.dll");
-            // Выводим имена DLL-файлов
             foreach (string dllFile in dllFiles)
             {
                 string PluginStatus = GetPluginStatus(Utils.CalculateSHA512Hash(dllFile));
                 if (PluginStatus == "Virus") continue;
+                if ((PluginStatus == "Not Verified" || PluginStatus == "Unsafe") && !ConfigMenager.PanelConfig.DeveloperMode) continue;
+
                 Assembly assembly = Assembly.LoadFrom(dllFile);
 
-                // Получаем все типы из сборки
                 Type[] types = assembly.GetTypes();
 
-                // Перебираем все типы
                 foreach (Type type in types)
                 {
-                    // Проверяем, является ли тип статическим классом и имеет имя JCPluginConfig
                     if (type.IsClass && type.IsSealed && type.IsAbstract && type.Name == "JCPluginConfig")
                     {
                         JCPlugin PluginInfo = new JCPlugin();
-                        // Получаем поле (переменную) по имени
+
                         FieldInfo field = type.GetField("PLUGIN_NAME", BindingFlags.Public | BindingFlags.Static);
 
                         if (field != null)
@@ -231,13 +229,10 @@ namespace JCorePanel
             List <JCAction> PluginsActions = new List<JCAction>();
             foreach (var Plugin in GetActivePlugins())
             {
-                // Получаем все типы из сборки
                 Type[] types = Plugin.assembly.GetTypes();
 
-                // Перебираем все типы
                 foreach (Type type in types)
                 {
-                    // Проверяем, является ли тип статическим классом и имеет имя JCPluginConfig
                     if (type.IsClass && type.BaseType.Name == "JCAccountActionBase")
                     {
                         object instance = Activator.CreateInstance(type);

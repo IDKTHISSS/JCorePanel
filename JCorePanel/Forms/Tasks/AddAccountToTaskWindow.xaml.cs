@@ -49,7 +49,7 @@ namespace JCorePanel
             foreach (var account in accounts)
             {
 
-                AccountListGrid.Children.Add(UI_Menager.GenerateSelectAccountTaskCard(account, (IsSelected) =>
+                AccountListGrid.Children.Add(new TaskSelectedAccountCard(account, (IsSelected) =>
                 {
                     if (IsSelected)
                     {
@@ -102,11 +102,20 @@ namespace JCorePanel
            
             foreach (var account in accounts)
             {
-                if (account.AccountInfo.Login.ToLower().Contains(TextToSearch.ToLower()) ||
-                    account.AccountInfo.MaFile.Session.SteamID.ToString().Contains(TextToSearch) ||
-                    account.AccountCache.Nickname.ToLower().Contains(TextToSearch.ToLower()))
+              if (account.AccountInfo.Login.ToLower().Contains(TextToSearch.ToLower()))
                 {
                     SelectedAccounts.Add(account);
+                    continue;
+                }
+                if(account.AccountInfo.MaFile != null && account.AccountInfo.MaFile.Session.SteamID.ToString().Contains(TextToSearch))
+                {
+                    SelectedAccounts.Add(account);
+                    continue;
+                }
+                if(account.AccountCache != null && account.AccountCache.Nickname.ToLower().Contains(TextToSearch.ToLower()))
+                {
+                    SelectedAccounts.Add(account);
+                    continue;
                 }
             }
             AddAcounts(SelectedAccounts);

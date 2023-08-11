@@ -101,8 +101,7 @@ namespace JCorePanel
             account.AccountInfo = Account;
             
             MainWindow mainWindow = System.Windows.Application.Current.MainWindow as MainWindow;
-            Border border = UI_Menager.GenerateAccountCard(account);
-            account.AccountCard = border;
+            account.AccountCard = new AccountCard(account);
             AccountsList.Add(account);
             mainWindow.AccountsListGrid.Children.Clear();
             foreach(var acc in AccountsList)

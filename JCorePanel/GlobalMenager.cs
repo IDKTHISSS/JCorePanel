@@ -69,6 +69,10 @@ namespace JCorePanel
 
                 return Utils.GetPluginProperty(PluginName, property);
             };
+            JCorePanelBase.GlobalMenager.GetSteamPath += () =>
+            {
+                return ConfigMenager.PanelConfig.SteamPath;
+            };
         }
     }
  

@@ -1,4 +1,7 @@
 ﻿using JCorePanel.Classes.Managers;
+using Microsoft.Win32;
+using Newtonsoft.Json;
+using SteamAuth;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -34,7 +37,7 @@ namespace JCorePanel
             SelectPage(0, 0);
             foreach (var plugin in PluginsManager.GetAllPlugins())
             {
-                PluginsListGrid.Children.Add(UI_Menager.GeneratePluginCard(plugin));
+                PluginsListGrid.Children.Add(new PluginCard(plugin));
             }
             AccountMenager.LoadAccounts();
             LoadAccounts();
@@ -44,6 +47,10 @@ namespace JCorePanel
             {
                 TasksListGrid.Children.Add(new TaskCard(task));
             }
+            ChangeLogData.Text = PanelData.ChangeLog;
+            VersionData.Content = PanelData.Version;
+            DateData.Content = PanelData.Date;
+            SetupSettingsPage();
 
         }
 
@@ -149,9 +156,8 @@ namespace JCorePanel
         {
             foreach (var account in AccountMenager.AccountsList)
             {
-                Border border = UI_Menager.GenerateAccountCard(account);
-                account.AccountCard = border;
-                AccountsListGrid.Children.Add(border);
+               
+                AccountsListGrid.Children.Add(new AccountCard(account));
             }
         }
 
@@ -229,7 +235,11 @@ namespace JCorePanel
                     }
                 }
         }
-
+        private void SetupSettingsPage()
+        {
+            SettingsSteamPath.Content = ConfigMenager.PanelConfig.SteamPath;
+            SettingsDeveloperMode.IsChecked = ConfigMenager.PanelConfig.DeveloperMode;
+        }
 
         private void InputBox_TextChanged(string TextToSearch)
         {
@@ -241,12 +251,22 @@ namespace JCorePanel
             AccountsListGrid.Children.Clear();
             foreach (var account in AccountMenager.AccountsList)
             {
-                if (account.AccountInfo.Login.ToLower().Contains(TextToSearch.ToLower()) ||
-                    account.AccountInfo.MaFile.Session.SteamID.ToString().Contains(TextToSearch) ||
-                    account.AccountCache.Nickname.ToLower().Contains(TextToSearch.ToLower()))
+                if (account.AccountInfo.Login.ToLower().Contains(TextToSearch.ToLower()))
                 {
                     AccountsListGrid.Children.Add(account.AccountCard);
+                    continue;
                 }
+                if(account.AccountInfo.MaFile != null && account.AccountInfo.MaFile.Session.SteamID.ToString().Contains(TextToSearch))
+                {
+                    AccountsListGrid.Children.Add(account.AccountCard);
+                    continue;
+                }
+                if(account.AccountCache != null && account.AccountCache.Nickname.ToLower().Contains(TextToSearch.ToLower()))
+                {
+                    AccountsListGrid.Children.Add(account.AccountCard);
+                    continue;
+                }
+
             }
         }
 
@@ -278,7 +298,7 @@ namespace JCorePanel
             {
                 foreach (var plugin in PluginsManager.PluginsList)
                 {
-                    PluginsListGrid.Children.Add(UI_Menager.GeneratePluginCard(plugin));
+                    PluginsListGrid.Children.Add(new PluginCard(plugin));
                 }
                 return;
             }
@@ -288,7 +308,7 @@ namespace JCorePanel
                     plugin.FrendlyName.ToLower().Contains(TextToSearch.ToLower()) ||
                     plugin.Hash.ToLower() == TextToSearch.ToLower())
                 {
-                    PluginsListGrid.Children.Add(UI_Menager.GeneratePluginCard(plugin));
+                    PluginsListGrid.Children.Add(new PluginCard(plugin));
                 }
             }
         }
@@ -300,7 +320,7 @@ namespace JCorePanel
 
         private void label1_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            Process.Start("https://discord.gg/cq8RFZ6V");
+            Process.Start("https://discord.gg/Nuc9DC5P");
         }
 
         private void label3_MouseDown(object sender, MouseButtonEventArgs e)
@@ -311,6 +331,88 @@ namespace JCorePanel
         private void label2_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Process.Start("https://github.com/IDKTHISSS/JCorePanel");
+        }
+
+        private void SettingsDeveloperMode_Click(object sender, RoutedEventArgs e)
+        {
+            if ((bool)SettingsDeveloperMode.IsChecked)
+            {
+                UI_Menager.ShowDialogConfirm("ATTENTION!!!\nBy enabling this mode, you allow the installation of unverified plugins. If someone asked you to enable this mode to install the plugin, most likely THIS IS SCAM and they are trying to steal all your accounts.", (confirm) =>
+                {
+                    if (confirm)
+                    {
+                        ConfigMenager.PanelConfig.DeveloperMode = (bool)SettingsDeveloperMode.IsChecked;
+                        ConfigMenager.SaveSettings();
+                    }
+                    else
+                    {
+                        SettingsDeveloperMode.IsChecked = false;
+                    }
+                });
+            }
+            else
+            {
+                ConfigMenager.PanelConfig.DeveloperMode = false;
+                ConfigMenager.SaveSettings();
+            }
+        }
+
+        private void SettingsSteamPath_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
+            openFileDialog1.Filter = "Steam executable (*.exe)|*.exe;";
+            openFileDialog1.FilterIndex = 0;
+            openFileDialog1.RestoreDirectory = true;
+
+            if (openFileDialog1.ShowDialog() == true)
+            {
+                SettingsSteamPath.Content = openFileDialog1.FileName;
+                ConfigMenager.PanelConfig.SteamPath = openFileDialog1.FileName;
+                ConfigMenager.SaveSettings();
+            }
+        }
+
+        private void SettingsSteamPath_DragEnter(object sender, System.Windows.DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+            {
+                e.Effects = System.Windows.DragDropEffects.Copy; // Указываем, что разрешено копирование
+            }
+            else
+            {
+                e.Effects = System.Windows.DragDropEffects.None; // Запрещаем операцию, если данные не являются файлами
+            }
+        }
+
+        private void SettingsSteamPath_Drop(object sender, System.Windows.DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
+                string filePath = files[0];
+
+                // Получаем расширение файла из пути
+                string fileExtension = filePath.Substring(filePath.LastIndexOf('.')).ToLower();
+
+                // Проверяем формат файла
+                if (fileExtension == ".exe")
+                {
+                    SettingsSteamPath.Content = filePath;
+                    ConfigMenager.PanelConfig.SteamPath = filePath;
+                    ConfigMenager.SaveSettings();
+                }
+                else
+                {
+                    // Файл имеет неподдерживаемый формат
+                    Console.WriteLine("Неподдерживаемый формат файла!");
+                }
+            }
+        }
+
+        private void image1_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
         }
     }
 }

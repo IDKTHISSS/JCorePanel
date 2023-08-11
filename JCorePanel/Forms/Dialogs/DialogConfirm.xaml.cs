@@ -23,7 +23,7 @@ namespace JCorePanel
         public DialogConfirm(string Messege)
         {
             InitializeComponent();
-            msgBox.Content = Messege;
+            msgBox.Text = Messege;
         }
 
         private void Button_ButtonClick(object sender, EventArgs e)

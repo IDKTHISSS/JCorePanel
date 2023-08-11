@@ -24,7 +24,7 @@
             <Grid>
 
                 <local:Button ButtonText="Ok" HorizontalAlignment="Center" Margin="0,178,0,0" VerticalAlignment="Top" ButtonClick="Button_ButtonClick" Height="36"/>
-                <Label x:Name="msgBox" FontSize="14" Content="Messege" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Height="118" Width="387" Margin="0,37,0,0" Foreground="White"/>
+                <TextBlock x:Name="msgBox" FontSize="14" Text="Messege" TextAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Top" Height="118" Width="387" Margin="0,37,0,0" Foreground="White"/>
                 
             </Grid>
         </Border>

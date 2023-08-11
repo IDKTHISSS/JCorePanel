@@ -26,9 +26,9 @@ namespace JCorePanel
 
             TaskItem = taskItem;
 
-            foreach(var acc in Utils.GetAccountsFromLogins(TaskItem.AccountNames))
+            foreach(var acc in Utils.GetAccountInstancesFromLogins(TaskItem.AccountNames))
             {
-                AccountListGrid.Children.Add(UI_Menager.GenerateAccountTaskCard(Utils.GetAccountBySteamAccount(acc), TaskItem));
+                AccountListGrid.Children.Add(new TaskAccountCard(acc, TaskItem));
             }
 
         }
@@ -45,7 +45,7 @@ namespace JCorePanel
             addAccountToTaskWindow.OnSelectedAccs = (SelectedAccs) => {
                 foreach(var acc in SelectedAccs)
                 {
-                    AccountListGrid.Children.Add(UI_Menager.GenerateAccountTaskCard(Utils.GetAccountBySteamAccount(acc), TaskItem));
+                    AccountListGrid.Children.Add(new TaskAccountCard(acc, TaskItem));
                 }
             };
             Utils.ShowPopupWindow(addAccountToTaskWindow);
@@ -56,24 +56,32 @@ namespace JCorePanel
             AccountListGrid.Children.Clear();
             if (TextToSearch == "")
             {
-                foreach (var acc in Utils.GetAccountsFromLogins(TaskItem.AccountNames))
+                foreach (var acc in Utils.GetAccountInstancesFromLogins(TaskItem.AccountNames))
                 {
-                    AccountListGrid.Children.Add(UI_Menager.GenerateAccountTaskCard(Utils.GetAccountBySteamAccount(acc), TaskItem));
+                    AccountListGrid.Children.Add(new TaskAccountCard(acc, TaskItem));
                 }
                 return;
             }
-            foreach (var account in Utils.GetAccountsFromLogins(TaskItem.AccountNames))
-            {
-                if (account.AccountInfo.Login.ToLower().Contains(TextToSearch.ToLower()) ||
-                    account.AccountInfo.MaFile.Session.SteamID.ToString().Contains(TextToSearch) ||
-                    Utils.GetAccountBySteamAccount(account).AccountCache.Nickname.ToLower().Contains(TextToSearch.ToLower()))
-                {
-                    AccountListGrid.Children.Add(UI_Menager.GenerateAccountTaskCard(Utils.GetAccountBySteamAccount(account), TaskItem));
-                }
-                
-            }
 
-           
+            foreach (var account in Utils.GetAccountInstancesFromLogins(TaskItem.AccountNames))
+            {
+                if (account.AccountInfo.Login.ToLower().Contains(TextToSearch.ToLower()))
+                {
+                    AccountListGrid.Children.Add(new TaskAccountCard(account, TaskItem));
+                    continue;
+                }
+                if (account.AccountInfo.MaFile != null && account.AccountInfo.MaFile.Session.SteamID.ToString().Contains(TextToSearch))
+                {
+                    AccountListGrid.Children.Add(new TaskAccountCard(account, TaskItem));
+                    continue;
+                }
+                if (account.AccountCache != null && account.AccountCache.Nickname.ToLower().Contains(TextToSearch.ToLower()))
+                {
+                    AccountListGrid.Children.Add(new TaskAccountCard(account, TaskItem));
+                    continue;
+                }
+               
+            }
         }
     }
 }

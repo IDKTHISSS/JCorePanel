@@ -9,6 +9,8 @@ namespace JCorePanel
 {
     public class JCConfig
     {
-        public List<JCPluginRef> PluginsSettings = new List<JCPluginRef> ();
+        public List<JCPluginRef> PluginsSettings = new List<JCPluginRef>();
+        public string SteamPath = null;
+        public bool DeveloperMode = false;
     }
 }
