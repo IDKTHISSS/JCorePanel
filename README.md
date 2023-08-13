@@ -1,9 +1,3 @@
-
-# JCorePanelBase
-
-This is the base for the panel and you can also make your own plugin based on this.
-
-
 # JCorePanel
 
 Small panel with plugin support. The main purpose is to work with Steam accounts and Steam client.
@@ -31,8 +25,4 @@ Small panel with plugin support. The main purpose is to work with Steam accounts
 
 [MIT](https://choosealicense.com/licenses/mit/)
 
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
 
