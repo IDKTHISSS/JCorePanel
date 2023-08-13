@@ -36,7 +36,7 @@ namespace JCorePanel
                 if (PluginStatus == "Virus") continue;
                 if ((PluginStatus == "Not Verified" || PluginStatus == "Unsafe") && !ConfigMenager.PanelConfig.DeveloperMode) continue;
 
-                Assembly assembly = Assembly.LoadFrom(dllFile);
+                Assembly assembly = Assembly.UnsafeLoadFrom(dllFile);
 
                 Type[] types = assembly.GetTypes();
 

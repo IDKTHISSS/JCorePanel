@@ -156,7 +156,6 @@ namespace JCorePanel
         {
             foreach (var account in AccountMenager.AccountsList)
             {
-               
                 AccountsListGrid.Children.Add(new AccountCard(account));
             }
         }
