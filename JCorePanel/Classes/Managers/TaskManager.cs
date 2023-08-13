@@ -114,23 +114,30 @@ namespace JCorePanel.Classes.Managers
         public static List<JCEventProperty> GetProperies(JCTask task)
         {
             List<JCEventProperty> properties = new List<JCEventProperty>();
-            Type[] types = PluginsManager.GetPluginByName(task.PluginName).assembly.GetTypes();
-
-            foreach (Type type in types)
+            try
             {
-                if (type.IsClass && type.BaseType.Name == "JCEventBase")
+                Type[] types = PluginsManager.GetPluginByName(task.PluginName).assembly.GetTypes();
+
+                foreach (Type type in types)
                 {
-                    object instance = Activator.CreateInstance(type, new object[] { task.PropertiesList });
-                    FieldInfo field = type.GetField("Name");
-                    string taskName = (string)field.GetValue(instance);
-                    
-                    if (taskName == task.TaskName)
+                    if (type.IsClass && type.BaseType.Name == "JCEventBase")
                     {
-                        properties = (List<JCEventProperty>)type.GetField("Properties").GetValue(instance);
+                        object instance = Activator.CreateInstance(type, new object[] { task.PropertiesList });
+                        FieldInfo field = type.GetField("Name");
+                        string taskName = (string)field.GetValue(instance);
+
+                        if (taskName == task.TaskName)
+                        {
+                            properties = (List<JCEventProperty>)type.GetField("Properties").GetValue(instance);
+                        }
                     }
                 }
+                return properties;
             }
-            return properties;
+            catch { 
+                return new List<JCEventProperty>();
+            }
+            
         }
         public static void CreateTask(JCTaskItem NewTask)
         {
