@@ -37,7 +37,7 @@ namespace JCorePanel
                 Inlines =
                 {
                     new Run(task.TaskName),
-                    new Run("   #"+task.PluginName) {  Foreground =(System.Windows.Media.Brush)new BrushConverter().ConvertFrom("#8A41FB") }
+                    new Run("    #"+task.PluginName) {  Foreground =(System.Windows.Media.Brush)new BrushConverter().ConvertFrom("#8A41FB") }
                 }
             };
             if(TaskManager.GetProperies(task).Count == 0)

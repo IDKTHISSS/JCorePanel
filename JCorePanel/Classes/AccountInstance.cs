@@ -9,6 +9,9 @@ using JCorePanelBase;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Media.Animation;
+using JCoreTradeFramework;
+using SteamKit2;
+using System.Net;
 
 namespace JCorePanel
 {
@@ -101,7 +104,6 @@ namespace JCorePanel
                 AvatarImage.ImageSource = new BitmapImage(new Uri(AccountCache.AvatarURL == null ? "https://avatars.cloudflare.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg" : AccountCache.AvatarURL));
             });
         }
-        
         private async Task UpdateInfo(JCSteamAccountInstance CurrectAccount)
         {
             if (CurrectAccount.AccountInfo.MaFile == null || CurrectAccount.AccountInfo.MaFile == new SteamGuardAccount())
@@ -138,8 +140,8 @@ namespace JCorePanel
             SetWorkStatus("Completed");
             SetInWork(false);
         }
-
-        public void StartAction(string Name)
+       
+    public void StartAction(string Name)
         {
             foreach (var action in ActionList)
             {
