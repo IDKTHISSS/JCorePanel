@@ -34,7 +34,7 @@ Join to discord channel (https://discord.gg/Nuc9DC5P) and go to plugins tab.
 
 ## Support
 
-For support join our Discord channel (https://discord.gg/Nuc9DC5P).
+For support join our Discord channel (https://discord.gg/cS4HFSyv7P).
 
 ## License
 
