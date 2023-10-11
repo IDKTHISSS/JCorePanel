@@ -11,6 +11,5 @@ namespace JCorePanel
     {
         public List<JCPluginRef> PluginsSettings = new List<JCPluginRef>();
         public string SteamPath = null;
-        public bool DeveloperMode = false;
     }
 }

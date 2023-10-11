@@ -20,7 +20,6 @@ namespace JCorePanel
     public static class PluginsManager
     {
         public static List<JCPlugin> PluginsList = new List<JCPlugin>();
-        public static JArray PluginStatusList = new JArray();
         public static List<JCPlugin> GetAllPlugins()
         {
 
@@ -28,14 +27,9 @@ namespace JCorePanel
             {
                 return new List<JCPlugin>();
             }
-            PluginStatusList = LoadAllStatus();
             string[] dllFiles = Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins"), "*.dll");
             foreach (string dllFile in dllFiles)
             {
-                string PluginStatus = GetPluginStatus(Utils.CalculateSHA512Hash(dllFile));
-                if (PluginStatus == "Virus") continue;
-                if ((PluginStatus == "Not Verified" || PluginStatus == "Unsafe") && !ConfigMenager.PanelConfig.DeveloperMode) continue;
-
                 Assembly assembly = Assembly.UnsafeLoadFrom(dllFile);
 
                 Type[] types = assembly.GetTypes();
@@ -98,8 +92,7 @@ namespace JCorePanel
                         {
                             PluginInfo.Author = field.GetValue(null) as string;
                         }
-                        PluginInfo.Hash = Utils.CalculateSHA512Hash(dllFile);
-
+                       
                         foreach(var plugin in ConfigMenager.PanelConfig.PluginsSettings)
                         {
                             if(plugin.PluginName == PluginInfo.Name)
@@ -108,7 +101,6 @@ namespace JCorePanel
                                     PluginInfo.IsEnabled = true;
                             }
                         }
-                        PluginInfo.Status = PluginStatus;
                         PluginInfo.assembly = assembly;
                         if (!ConfigMenager.PanelConfig.PluginsSettings.Exists(item => item.PluginName == PluginInfo.Name))
                         {
@@ -158,8 +150,6 @@ namespace JCorePanel
                     var tempPlugin = PluginsList[i];
                     tempPlugin.IsEnabled = true;
                     PluginsList[i] = tempPlugin;
-
-                    
                 }
             }
         }
@@ -250,28 +240,6 @@ namespace JCorePanel
             }
             return PluginsActions;
         }
-        public static JArray LoadAllStatus()
-        {
-            JArray result = Utils.GetJsonArrayFromUrl("https://pastebin.com/raw/BqvJiVHj");
-            if(result == null)
-            {
-                UI_Menager.ShowDialog("No Internet All plugins was marked as not Verified.");
-                return new JArray();
-            }
-            return result;
-        }
-        public static string GetPluginStatus(string PluginHash)
-        {
-            foreach (JToken element in PluginStatusList)
-            {
-                if (element["Hash"].ToString() == PluginHash)
-                {
-                    return element["Status"].ToString();
-                }
-            }
-            return "Not Verified";
-        }
-   
         public static List<JCEventInstance> GetEventByPlugin(JCPlugin plugin)
         {
             List<JCEventInstance> tasks = new List<JCEventInstance>();

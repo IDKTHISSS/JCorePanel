@@ -53,40 +53,10 @@
                         </TransformGroup>
                     </Label.RenderTransform>
                 </Label>
-                <Label x:Name="label_Copy2" Content="Author: Admin" FontSize="16" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Margin="27,92,0,0" VerticalAlignment="Top" Background="#00989898" Foreground="White" Width="262" Height="33" RenderTransformOrigin="0.5,0.5" Cursor="Arrow">
-                    <Label.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform ScaleY="1"/>
-                            <SkewTransform/>
-                            <RotateTransform/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </Label.RenderTransform>
-                </Label>
-                <Label x:Name="label_Copy3" Content="Verify status: Verified" FontSize="16" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Margin="27,143,0,0" VerticalAlignment="Top" Background="#00989898" Foreground="White" Width="262" Height="34" RenderTransformOrigin="0.5,0.5" Cursor="Arrow">
-                    <Label.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform ScaleY="1"/>
-                            <SkewTransform/>
-                            <RotateTransform/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </Label.RenderTransform>
-                </Label>
-                <Label x:Name="label_Copy4" Content="Hash: 407A6C83C1..." ToolTip="" FontSize="12" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Margin="27,165,0,0" VerticalAlignment="Top" Background="#00989898" Foreground="Gray" Width="262" Height="34" RenderTransformOrigin="0.5,0.5" Cursor="Hand" MouseDown="label_Copy4_MouseDown">
-                    <Label.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform ScaleY="1"/>
-                            <SkewTransform/>
-                            <RotateTransform/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </Label.RenderTransform>
-                </Label>
-                <TextBlock  x:Name="label_Copy5" IsEnabled="False" TextWrapping="WrapWithOverflow" Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis id dictum dui. Nam accumsan velit vitae nisl rutrum hendrerit. Cras posuere rhoncus tellus sit amet venenatis. Suspendisse potenti. Proin nec nibh sed sem dignissim consectetur. Donec faucibus leo vel sem sollicitudin, nec pharetra mauris viverra. Sed non tortor urna. Pellentesque." FontSize="14" HorizontalAlignment="Center" Margin="0,211,0,0" VerticalAlignment="Top" Background="#00989898" Foreground="White" Width="440" Height="186" RenderTransformOrigin="0.5,0.5" Cursor="Arrow">
+                <TextBlock  x:Name="label_Copy5" IsEnabled="False" TextWrapping="WrapWithOverflow" Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis id dictum dui. Nam accumsan velit vitae nisl rutrum hendrerit. Cras posuere rhoncus tellus sit amet venenatis. Suspendisse potenti. Proin nec nibh sed sem dignissim consectetur. Donec faucibus leo vel sem sollicitudin, nec pharetra mauris viverra. Sed non tortor urna. Pellentesque." FontSize="14" HorizontalAlignment="Center" Margin="0,92,0,0" VerticalAlignment="Top" Background="#00989898" Foreground="White" Width="440" Height="305" RenderTransformOrigin="0.5,0.5" Cursor="Arrow">
 
                 </TextBlock>
-                <Label x:Name="label_Copy6" Content="0.0.0.1" ToolTip="1" FontSize="12" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Margin="27,113,0,0" VerticalAlignment="Top" Background="#00989898" Foreground="Gray" Width="113" Height="36" RenderTransformOrigin="0.5,0.5" Cursor="Arrow">
+                <Label x:Name="label_Copy6" Content="0.0.0.1" ToolTip="1" FontSize="12" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Margin="447,407,0,0" VerticalAlignment="Top" Background="#00989898" Foreground="Gray" Width="113" Height="36" RenderTransformOrigin="0.5,0.5" Cursor="Arrow">
                     <Label.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform ScaleY="1"/>

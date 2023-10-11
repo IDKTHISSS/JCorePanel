@@ -80,17 +80,7 @@ namespace JCorePanel
                 return bitmapImage;
             }
         }
-        public static string CalculateSHA512Hash(string filePath)
-        {
-            using (var sha512 = SHA512.Create())
-            {
-                using (var stream = File.OpenRead(filePath))
-                {
-                    byte[] hashBytes = sha512.ComputeHash(stream);
-                    return BitConverter.ToString(hashBytes).Replace("-", "").ToUpper();
-                }
-            }
-        }
+       
         public static JArray GetJsonArrayFromUrl(string url)
         {
             try
@@ -109,22 +99,7 @@ namespace JCorePanel
                 return null;
             }
         }
-        public static System.Windows.Media.Brush GetPluginColorStatus(string Status)
-        {
-            switch(Status)
-            {
-
-                case "Verified":
-                    return (System.Windows.Media.Brush)new BrushConverter().ConvertFrom("#3CFF8D");
-                case "Not Verified":
-                    return (System.Windows.Media.Brush)new BrushConverter().ConvertFrom("#8A41FB");
-                case "Unsafe":
-                    return System.Windows.Media.Brushes.Yellow;
-                case "Virus":
-                    return System.Windows.Media.Brushes.Red;
-            }
-            return System.Windows.Media.Brushes.White;
-        }
+       
         public static string GenerateRandomString()
         {
             const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

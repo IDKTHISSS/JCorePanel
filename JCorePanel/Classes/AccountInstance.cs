@@ -12,6 +12,7 @@ using System.Windows.Media.Animation;
 using JCoreTradeFramework;
 using SteamKit2;
 using System.Net;
+using System.Runtime.InteropServices;
 
 namespace JCorePanel
 {
@@ -115,7 +116,10 @@ namespace JCorePanel
             SetWorkStatus("Logging");
             await AccountInfo.CheckSession();
             SetWorkStatus("Getting Info");
-            if(AccountCache == null)
+            Console.WriteLine(AccountInfo.MaFile.Session.SessionID);
+            Console.WriteLine(AccountInfo.MaFile.Session.RefreshToken);
+            return;
+            if (AccountCache == null)
             {
                 AccountCache = new SteamAccountCache();
             }

@@ -103,10 +103,10 @@ namespace JCorePanel
             MainWindow mainWindow = System.Windows.Application.Current.MainWindow as MainWindow;
             account.AccountCard = new AccountCard(account);
             AccountsList.Add(account);
-            mainWindow.AccountsListGrid.Children.Clear();
+            mainWindow.accountCards.Clear();
             foreach(var acc in AccountsList)
             {
-                mainWindow.AccountsListGrid.Children.Add(acc.AccountCard);
+                mainWindow.accountCards.Add(acc.AccountCard);
             }
 
         }

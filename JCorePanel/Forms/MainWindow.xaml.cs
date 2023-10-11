@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using SteamAuth;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -27,6 +28,8 @@ namespace JCorePanel
     /// </summary>
     public partial class MainWindow : Window
     {
+        public ObservableCollection<AccountCard> accountCards = new ObservableCollection<AccountCard>();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -39,6 +42,7 @@ namespace JCorePanel
             {
                 PluginsListGrid.Children.Add(new PluginCard(plugin));
             }
+            ItemsControl1.ItemsSource = accountCards;
             AccountMenager.LoadAccounts();
             LoadAccounts();
 
@@ -156,7 +160,7 @@ namespace JCorePanel
         {
             foreach (var account in AccountMenager.AccountsList)
             {
-                AccountsListGrid.Children.Add(new AccountCard(account));
+                accountCards.Add(new AccountCard(account));
             }
         }
 
@@ -180,10 +184,10 @@ namespace JCorePanel
        
         private void CancelSearchAccount()
         {
-            AccountsListGrid.Children.Clear();
+            accountCards.Clear();
             foreach (var account in AccountMenager.AccountsList)
             {
-                AccountsListGrid.Children.Add(account.AccountCard);
+                accountCards.Add(account.AccountCard);
             }
         }
 
@@ -237,7 +241,6 @@ namespace JCorePanel
         private void SetupSettingsPage()
         {
             SettingsSteamPath.Content = ConfigMenager.PanelConfig.SteamPath;
-            SettingsDeveloperMode.IsChecked = ConfigMenager.PanelConfig.DeveloperMode;
         }
 
         private void InputBox_TextChanged(string TextToSearch)
@@ -247,22 +250,22 @@ namespace JCorePanel
                 CancelSearchAccount();
                 return;
             }
-            AccountsListGrid.Children.Clear();
+            accountCards.Clear();
             foreach (var account in AccountMenager.AccountsList)
             {
                 if (account.AccountInfo.Login.ToLower().Contains(TextToSearch.ToLower()))
                 {
-                    AccountsListGrid.Children.Add(account.AccountCard);
+                    accountCards.Add(account.AccountCard);
                     continue;
                 }
                 if(account.AccountInfo.MaFile != null && account.AccountInfo.MaFile.Session.SteamID.ToString().Contains(TextToSearch))
                 {
-                    AccountsListGrid.Children.Add(account.AccountCard);
+                    accountCards.Add(account.AccountCard);
                     continue;
                 }
                 if(account.AccountCache != null && account.AccountCache.Nickname.ToLower().Contains(TextToSearch.ToLower()))
                 {
-                    AccountsListGrid.Children.Add(account.AccountCard);
+                    accountCards.Add(account.AccountCard);
                     continue;
                 }
 
@@ -304,8 +307,7 @@ namespace JCorePanel
             foreach (var plugin in PluginsManager.PluginsList)
             {
                 if (plugin.Name.ToLower().Contains(TextToSearch.ToLower()) ||
-                    plugin.FrendlyName.ToLower().Contains(TextToSearch.ToLower()) ||
-                    plugin.Hash.ToLower() == TextToSearch.ToLower())
+                    plugin.FrendlyName.ToLower().Contains(TextToSearch.ToLower()))
                 {
                     PluginsListGrid.Children.Add(new PluginCard(plugin));
                 }
@@ -334,26 +336,7 @@ namespace JCorePanel
 
         private void SettingsDeveloperMode_Click(object sender, RoutedEventArgs e)
         {
-            if ((bool)SettingsDeveloperMode.IsChecked)
-            {
-                UI_Menager.ShowDialogConfirm("ATTENTION!!!\nBy enabling this mode, you allow the installation of unverified plugins. If someone asked you to enable this mode to install the plugin, most likely THIS IS SCAM and they are trying to steal all your accounts.", (confirm) =>
-                {
-                    if (confirm)
-                    {
-                        ConfigMenager.PanelConfig.DeveloperMode = (bool)SettingsDeveloperMode.IsChecked;
-                        ConfigMenager.SaveSettings();
-                    }
-                    else
-                    {
-                        SettingsDeveloperMode.IsChecked = false;
-                    }
-                });
-            }
-            else
-            {
-                ConfigMenager.PanelConfig.DeveloperMode = false;
-                ConfigMenager.SaveSettings();
-            }
+            
         }
 
         private void SettingsSteamPath_MouseDown(object sender, MouseButtonEventArgs e)

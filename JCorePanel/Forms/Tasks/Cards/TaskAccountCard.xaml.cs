@@ -21,7 +21,7 @@ namespace JCorePanel
 { 
     public partial class TaskAccountCard : UserControl
     {
-        AccountInstance CurrectAccount;
+        public AccountInstance CurrectAccount;
         JCTaskItem CurrectTastItem;
         public TaskAccountCard(AccountInstance account, JCTaskItem taskItem)
         {

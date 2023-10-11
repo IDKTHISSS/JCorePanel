@@ -193,10 +193,19 @@
 
 
                         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden" Margin="0,62,-8,0" Grid.Row="1">
-                            <UniformGrid x:Name="AccountsListGrid" Columns="4" VerticalAlignment="Top" HorizontalAlignment="Center" Width="734">
+                            <ItemsControl x:Name="ItemsControl1"  HorizontalAlignment="Center" VerticalAlignment="Top">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="4" Width="734"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <!-- Здесь вы можете разместить ваш UserControl (AccountCard) -->
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
 
-
-                            </UniformGrid>
                         </ScrollViewer>
                         <local:Button ButtonText="Add Account" ButtonClick="Button_MouseDown" Width="162" Height="34" HorizontalAlignment="Left" Margin="561,17,0,0" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" >
                             <local:Button.RenderTransform>
@@ -256,9 +265,6 @@
 
                         <Label Content="Steam Path:" VerticalContentAlignment="Center" Foreground="White" FontSize="16" Margin="41,45,588,428"/>
                         <Label x:Name="SettingsSteamPath" AllowDrop="True" Content="Steam Path:" VerticalContentAlignment="Center" Foreground="#989898" FontSize="16" Margin="138,45,37,428" MouseDown="SettingsSteamPath_MouseDown" DragEnter="SettingsSteamPath_DragEnter" Drop="SettingsSteamPath_Drop"/>
-                        <Rectangle Fill="#242728" RadiusX="9" RadiusY="9" Margin="22,115,461,355"/>
-                        <ToggleButton x:Name="SettingsDeveloperMode" Cursor="Hand" Content="Some Text" Margin="186,129,520,369" Click="SettingsDeveloperMode_Click"/>
-                        <Label Content="Developer Mode" VerticalContentAlignment="Center" Foreground="White" FontSize="16" Margin="41,115,572,357"/>
                     </Grid>
 
                 </TabItem>

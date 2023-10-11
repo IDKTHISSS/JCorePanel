@@ -20,6 +20,7 @@ namespace JCorePanel
     public partial class AccountListTaskWindow : BasePopupWindow
     {
         public JCTaskItem TaskItem;
+        private List<TaskAccountCard> AccountCards = new List<TaskAccountCard>();
         public AccountListTaskWindow(JCTaskItem taskItem)
         {
             InitializeComponent();
@@ -28,7 +29,9 @@ namespace JCorePanel
 
             foreach(var acc in Utils.GetAccountInstancesFromLogins(TaskItem.AccountNames))
             {
-                AccountListGrid.Children.Add(new TaskAccountCard(acc, TaskItem));
+                TaskAccountCard NewAccountCard = new TaskAccountCard(acc, TaskItem);
+                AccountCards.Add(NewAccountCard);
+                AccountListGrid.Children.Add(NewAccountCard);
             }
 
         }
@@ -56,28 +59,28 @@ namespace JCorePanel
             AccountListGrid.Children.Clear();
             if (TextToSearch == "")
             {
-                foreach (var acc in Utils.GetAccountInstancesFromLogins(TaskItem.AccountNames))
+                foreach (var acc in AccountCards)
                 {
-                    AccountListGrid.Children.Add(new TaskAccountCard(acc, TaskItem));
+                    AccountListGrid.Children.Add(acc);
                 }
                 return;
             }
 
-            foreach (var account in Utils.GetAccountInstancesFromLogins(TaskItem.AccountNames))
+            foreach (var account in AccountCards)
             {
-                if (account.AccountInfo.Login.ToLower().Contains(TextToSearch.ToLower()))
+                if (account.CurrectAccount.AccountInfo.Login.ToLower().Contains(TextToSearch.ToLower()))
                 {
-                    AccountListGrid.Children.Add(new TaskAccountCard(account, TaskItem));
+                    AccountListGrid.Children.Add(account);
                     continue;
                 }
-                if (account.AccountInfo.MaFile != null && account.AccountInfo.MaFile.Session.SteamID.ToString().Contains(TextToSearch))
+                if (account.CurrectAccount.AccountInfo.MaFile != null && account.CurrectAccount.AccountInfo.MaFile.Session.SteamID.ToString().Contains(TextToSearch))
                 {
-                    AccountListGrid.Children.Add(new TaskAccountCard(account, TaskItem));
+                    AccountListGrid.Children.Add(account);
                     continue;
                 }
-                if (account.AccountCache != null && account.AccountCache.Nickname.ToLower().Contains(TextToSearch.ToLower()))
+                if (account.CurrectAccount.AccountCache != null && account.CurrectAccount.AccountCache.Nickname.ToLower().Contains(TextToSearch.ToLower()))
                 {
-                    AccountListGrid.Children.Add(new TaskAccountCard(account, TaskItem));
+                    AccountListGrid.Children.Add(account);
                     continue;
                 }
                

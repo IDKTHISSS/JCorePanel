@@ -98,12 +98,18 @@ namespace JCorePanel
                             eventInfo2.AddEventHandler(instance, eventHandler2);
                             if (math == null)
                             {
-                                Logger.Log($"[{Plugin.Name}] {taskName} not found task body.");
+                                Logger.Log(LogLevel.Warning, $"[{Plugin.Name}] {taskName} not found task body.");
                                 continue;
                             }
                             SetPlaceholder("#"+taskName);
-                            math.Invoke(instance, new object[] { AccountList });
-                            
+                            try
+                            {
+                                math.Invoke(instance, new object[] { AccountList });
+                            }
+                            catch (Exception ex)
+                            {
+                                Logger.Log(LogLevel.Error, $"[{Plugin.Name}] {taskName} wos ended with error: {ex.Message}");
+                            }
                         }
                     }
                 }

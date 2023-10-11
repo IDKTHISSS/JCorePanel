@@ -27,19 +27,8 @@ namespace JCorePanel
             CurrectPlugin = Plugin;
             label_Copy.Content = Plugin.FrendlyName;
             label_Copy1.Content = Plugin.Name;
-            label_Copy2.Content = "Author: " + Plugin.Author;
             label_Copy6.Content = Plugin.FrendlyVersion;
             label_Copy6.ToolTip = Plugin.Version;
-            label_Copy4.Content = "Hash: " + Plugin.Hash.Substring(0, 14) + "...";
-            label_Copy4.ToolTip = Plugin.Hash;
-            label_Copy3.Content = new TextBlock
-            {
-                Inlines =
-                {
-                    new Run("Verify status: "),
-                    new Run(Plugin.Status) {  Foreground = Utils.GetPluginColorStatus(Plugin.Status) }
-                }
-            };
             label_Copy5.Text = Plugin.Description;
         }
 
@@ -50,7 +39,6 @@ namespace JCorePanel
 
         private void label_Copy4_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            JCorePanelBase.Utils.SetTextToClipboard(CurrectPlugin.Hash);
         }
     }
 }

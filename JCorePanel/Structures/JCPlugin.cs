@@ -17,8 +17,6 @@ namespace JCorePanel
         public string Name;
         public int Version;
         public string Author;
-        public string Hash;
-        public string Status;
         public string Description;
 
         public Assembly assembly;
