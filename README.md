@@ -30,11 +30,11 @@ Create a "Plugins" folder and drag and drop plugin dll files
 
 #### Where i can find plugins?
 
-Join to discord channel (https://discord.gg/Nuc9DC5P) and go to plugins tab.
+Join to discord channel (https://discord.gg/cS4HFSyv7P) and go to plugins tab.
 
 ## Support
 
-For support join our Discord channel (https://discord.gg/Nuc9DC5P).
+For support join our Discord channel (https://discord.gg/cS4HFSyv7P).
 
 ## License
 
