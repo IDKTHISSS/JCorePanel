@@ -164,10 +164,8 @@
                 <TabItem Header="Main">
                     <Grid>
                         <Label Content="Changelog" Foreground="White" FontSize="20" Margin="10,10,622,468"/>
-                        <Label x:Name="label1" Foreground="#989898" Height="26" Margin="9,483,529,1" MouseDown="label1_MouseDown" Cursor="Hand">
-                            <TextBlock TextDecorations="Underline">Discord: https://discord.gg/Nuc9DC5P</TextBlock>
-                        </Label>
-                        <Label x:Name="label2" Foreground="#989898" Height="26" Margin="310,487,182,5" MouseDown="label2_MouseDown" Cursor="Hand">
+                        <Label x:Name="label1" Foreground="#989898" Height="26" Margin="9,483,529,1" MouseDown="label1_MouseDown" Cursor="Hand"/>
+                        <Label x:Name="label2" Foreground="#989898" Height="26" Margin="23,487,469,5" MouseDown="label2_MouseDown" Cursor="Hand">
                             <TextBlock TextDecorations="Underline">GitHub: JCorePanel Source Code</TextBlock>
                         </Label>
                         <Label x:Name="label3" Foreground="#989898" Height="26" Margin="594,487,24,5" MouseDown="label3_MouseDown" Cursor="Hand">
