@@ -28,13 +28,6 @@ Small panel with plugin support. The main purpose is to work with Steam accounts
 
 Create a "Plugins" folder and drag and drop plugin dll files
 
-#### Where i can find plugins?
-
-Join to discord channel (https://discord.gg/cS4HFSyv7P) and go to plugins tab.
-
-## Support
-
-For support join our Discord channel (https://discord.gg/cS4HFSyv7P).
 
 ## License
 
