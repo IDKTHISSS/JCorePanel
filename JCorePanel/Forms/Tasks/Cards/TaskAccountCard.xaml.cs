@@ -13,12 +13,13 @@ namespace JCorePanel
     {
         public AccountInstance CurrectAccount;
         JCTaskItem CurrectTastItem;
+        public Action OnAccountRemoved;
         public TaskAccountCard(AccountInstance account, JCTaskItem taskItem)
         {
             InitializeComponent();
             CurrectAccount = account;
             CurrectTastItem = taskItem;
-            AvatarImage.ImageSource = new BitmapImage(new Uri(account.AccountCache == null ? "https://avatars.cloudflare.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg" : account.AccountCache.AvatarURL));
+            AvatarImage.ImageSource = Utils.CreateBitmapImageFromBytes(account.AccountCache.AvatarBytes);
             TitleLabel.Content = account.AccountCache != null ? account.AccountCache.Nickname : "Name";
             LoginLabel.Content = account.AccountInfo.Login;
 
@@ -30,6 +31,7 @@ namespace JCorePanel
             {
                 if (task.TaskItem.TaskName == CurrectTastItem.TaskName)
                 {
+                    OnAccountRemoved();
                     task.TaskItem.AccountNames.RemoveAll(item => item == CurrectAccount.AccountInfo.Login);
                     (this.Parent as UniformGrid).Children.Remove(this);
                     TaskManager.EditTask(CurrectTastItem, task.TaskItem);

@@ -62,10 +62,6 @@ namespace JCorePanel
                 SetIsInWork(true);
 
                 Logger.Log("Start task: " + TaskItem.TaskName);
-                if (TaskItem.AccountNames.Count == 0 || TaskItem.EventList.Count == 0)
-                {
-                    StopTask();
-                }
                 AccountList = Utils.GetAccountsFromLogins(TaskItem.AccountNames);
                 foreach (var Plugin in PluginsManager.GetActivePlugins())
                 {

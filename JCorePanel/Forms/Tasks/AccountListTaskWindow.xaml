@@ -22,7 +22,7 @@
         <Border x:Name="MainWindowXAML" CornerRadius="12" BorderThickness="4"  Padding="0" Background="#111111" Margin="-1,0,-7,-6">
 
             <Grid>
-                <local:InputBox x:Name="SearchAccountBox" Tag="Search" Width="450" Margin="30,18,30,421" TextChanged="SearchAccountBox_TextChanged" />
+                <local:InputBox x:Name="SearchAccountBox" Tag="Search" Width="450" Margin="30,18,30,421" TextChanged="SearchAccountBox_TextChanged" Loaded="SearchAccountBox_Loaded" />
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden" Width="470" Margin="20,66,20,99">
                     <UniformGrid x:Name="AccountListGrid" Columns="3" VerticalAlignment="Top" HorizontalAlignment="Center" Width="470"/>
                 </ScrollViewer>

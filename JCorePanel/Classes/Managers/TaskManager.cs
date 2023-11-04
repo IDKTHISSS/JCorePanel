@@ -12,20 +12,6 @@ namespace JCorePanel.Classes.Managers
     public static class TaskManager
     {
         public static List<TaskInstance> TaskList = new List<TaskInstance>();
-        /*public static List<JCTaskItem> GetAllTasks()
-        {
-            TaskList.Clear();
-            if (!Directory.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Tasks")))
-            {
-                return new List<JCTaskItem>();
-            }
-            string[] taskFiles = Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Tasks"), "*.jcTask");
-            foreach (string taskFile in taskFiles)
-            {
-                TaskList.Add(JsonConvert.DeserializeObject<JCTaskItem>(File.ReadAllText(taskFile)));
-            }
-            return TaskList;
-        }*/
         public static void LoadTasks()
         {
             TaskList.Clear();

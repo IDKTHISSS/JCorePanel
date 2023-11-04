@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 
 namespace JCorePanel
@@ -20,6 +21,15 @@ namespace JCorePanel
             foreach (var acc in Utils.GetAccountInstancesFromLogins(TaskItem.AccountNames))
             {
                 TaskAccountCard NewAccountCard = new TaskAccountCard(acc, TaskItem);
+                NewAccountCard.OnAccountRemoved += new Action(() => {
+                    foreach (var account in AccountCards.ToList())
+                    {
+                        if(account.CurrectAccount.AccountInfo.Login == acc.AccountInfo.Login)
+                        {
+                            AccountCards.Remove(account);
+                        }
+                    }
+                });
                 AccountCards.Add(NewAccountCard);
                 AccountListGrid.Children.Add(NewAccountCard);
             }
@@ -76,6 +86,11 @@ namespace JCorePanel
                 }
 
             }
+        }
+
+        private void SearchAccountBox_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+
         }
     }
 }

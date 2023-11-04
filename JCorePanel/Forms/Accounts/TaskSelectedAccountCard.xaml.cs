@@ -12,7 +12,7 @@ namespace JCorePanel
     /// </summary>
     public partial class TaskSelectedAccountCard : UserControl
     {
-        AccountInstance accountInstance;
+        public AccountInstance accountInstance;
         Action<bool> OnSelect;
         bool IsSelected = false;
         public TaskSelectedAccountCard(AccountInstance account, Action<bool> onSelect)
@@ -20,7 +20,7 @@ namespace JCorePanel
             InitializeComponent();
             accountInstance = account;
             OnSelect = onSelect;
-            AvatarImage.ImageSource = new BitmapImage(new Uri(account.AccountCache == null ? "https://avatars.cloudflare.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg" : account.AccountCache.AvatarURL));
+            AvatarImage.ImageSource = Utils.CreateBitmapImageFromBytes(account.AccountCache.AvatarBytes);
             TitleLabel.Content = account.AccountCache != null ? account.AccountCache.Nickname : "Name";
             LoginLabel.Content = account.AccountInfo.Login;
         }
@@ -61,6 +61,11 @@ namespace JCorePanel
             UI_Menager.ApplyBlurAnimation(Avatar, TimeSpan.FromSeconds(0.2), 0);
             UI_Menager.ApplyBlurAnimation(TitleLabel, TimeSpan.FromSeconds(0.2), 0);
             UI_Menager.ApplyBlurAnimation(LoginLabel, TimeSpan.FromSeconds(0.2), 0);
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

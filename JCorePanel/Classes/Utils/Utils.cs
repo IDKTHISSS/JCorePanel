@@ -16,7 +16,27 @@ namespace JCorePanel
 {
     public static class Utils
     {
+        public static BitmapImage CreateBitmapImageFromBytes(byte[] imageBytes)
+        {
+            BitmapImage bitmapImage = new BitmapImage();
+            if (imageBytes == null)
+            {
+                using (WebClient webClient = new WebClient())
+                {
+                    imageBytes = webClient.DownloadData("https://avatars.cloudflare.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg");
+                }
+            }
+            using (MemoryStream memoryStream = new MemoryStream(imageBytes))
+            {
+                bitmapImage.BeginInit();
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.StreamSource = memoryStream;
+                bitmapImage.EndInit();
+                bitmapImage.Freeze();
 
+                return bitmapImage;
+            }
+        }
         public static List<JCSteamAccountInstance> GetAccountsFromLogins(List<string> logins)
         {
             if (logins == null) return new List<JCSteamAccountInstance>();

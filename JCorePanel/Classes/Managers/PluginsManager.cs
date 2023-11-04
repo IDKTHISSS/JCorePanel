@@ -93,6 +93,7 @@ namespace JCorePanel
                             }
                         }
                         PluginInfo.assembly = assembly;
+
                         if (!ConfigMenager.PanelConfig.PluginsSettings.Exists(item => item.PluginName == PluginInfo.Name))
                         {
                             ConfigMenager.PanelConfig.PluginsSettings.Add(new JCPluginRef { PluginName = PluginInfo.Name, isEnabled = false, PluginSettings = PluginInfo.Properties });
@@ -100,6 +101,17 @@ namespace JCorePanel
                         }
 
                         PluginsList.Add(PluginInfo);
+                        var math = type.GetMethod("OnLoad");
+                        if (math == null) continue;
+                        try
+                        {
+                            math.Invoke(null, new object[] { AccountMenager.AccountsList.Cast<JCSteamAccountInstance>().ToList() });
+                            Logger.Log($"[{PluginInfo.Name}] OnLoad()");
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.Log(LogLevel.Error, $"[{PluginInfo.Name}] OnLoad() wos ended with error: {ex.Message}");
+                        }
                     }
                 }
             }

@@ -14,6 +14,7 @@ namespace JCorePanel
         private JCTaskItem TaskItem;
         public List<AccountInstance> selectedAccs = new List<AccountInstance>();
         public Action<List<AccountInstance>> OnSelectedAccs;
+        private List<TaskSelectedAccountCard> SelectedAccountCards = new List<TaskSelectedAccountCard>();
         public AddAccountToTaskWindow(JCTaskItem taskItem)
         {
             InitializeComponent();
@@ -27,17 +28,9 @@ namespace JCorePanel
                     accounts.RemoveAll(account => account.AccountInfo.Login == acc);
                 }
             }
-
-            AddAcounts(accounts);
-
-        }
-        private void AddAcounts(List<AccountInstance> accounts)
-        {
-            AccountListGrid.Children.Clear();
             foreach (var account in accounts)
             {
-
-                AccountListGrid.Children.Add(new TaskSelectedAccountCard(account, (IsSelected) =>
+                SelectedAccountCards.Add(new TaskSelectedAccountCard(account, (IsSelected) =>
                 {
                     if (IsSelected)
                     {
@@ -49,6 +42,23 @@ namespace JCorePanel
                     }
 
                 }));
+            }
+            AddAcounts(accounts);
+
+        }
+        private void AddAcounts(List<AccountInstance> accounts)
+        {
+            AccountListGrid.Children.Clear();
+            foreach (var account in accounts)
+            {
+                foreach(var card in SelectedAccountCards)
+                {
+                    if(card.accountInstance.AccountInfo.Login == account.AccountInfo.Login)
+                    {
+                        AccountListGrid.Children.Add(card);
+                    }
+                }
+               
             }
         }
         private void label_MouseDown(object sender, MouseButtonEventArgs e)

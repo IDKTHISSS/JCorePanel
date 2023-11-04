@@ -2,6 +2,8 @@
 using SteamAuth;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -98,7 +100,7 @@ namespace JCorePanel
                 AccountCard.TitleLabel.Content = labelText.Length > 10 ? labelText.Substring(0, 10) + "..." : labelText;
 
                 ImageBrush AvatarImage = (ImageBrush)AccountCard.ImageBorder.Background;
-                AvatarImage.ImageSource = new BitmapImage(new Uri(AccountCache.AvatarURL == null ? "https://avatars.cloudflare.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_medium.jpg" : AccountCache.AvatarURL));
+                AvatarImage.ImageSource = Utils.CreateBitmapImageFromBytes(AccountCache.AvatarBytes);
             });
         }
         private async Task UpdateInfo(JCSteamAccountInstance CurrectAccount)
@@ -112,9 +114,6 @@ namespace JCorePanel
             SetWorkStatus("Logging");
             await AccountInfo.CheckSession();
             SetWorkStatus("Getting Info");
-            Console.WriteLine(AccountInfo.MaFile.Session.SessionID);
-            Console.WriteLine(AccountInfo.MaFile.Session.RefreshToken);
-            return;
             if (AccountCache == null)
             {
                 AccountCache = new SteamAccountCache();
@@ -129,11 +128,17 @@ namespace JCorePanel
                 Match UserAvatar = Regex.Match(Regex.Match(text, avatarHalf).Groups[1].Value, avatarReg).NextMatch();
                 UserAvatar.NextMatch();
                 UserAvatar.NextMatch();
-                AccountCache.AvatarURL = UserAvatar.Groups[1].Value;
+                using (WebClient webClient = new WebClient())
+                {
+                    AccountCache.AvatarBytes = webClient.DownloadData(UserAvatar.Groups[1].Value);
+                } 
             }
             else
             {
-                AccountCache.AvatarURL = Regex.Match(Regex.Match(text, avatarHalf).Groups[1].Value, avatarReg).Groups[1].Value;
+                using (WebClient webClient = new WebClient())
+                {
+                    AccountCache.AvatarBytes = webClient.DownloadData(Regex.Match(Regex.Match(text, avatarHalf).Groups[1].Value, avatarReg).Groups[1].Value);
+                }
             }
             AccountMenager.SaveCache(AccountInfo, AccountCache);
             UpdateAccountCardFromCache(AccountCache);

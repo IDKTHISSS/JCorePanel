@@ -30,13 +30,16 @@ namespace JCorePanel
             Canvas.SetTop(PageRect, 0);
             PageRect.Margin = new Thickness(13, 28, 0, 0);
             SelectPage(0, 0);
+
+            AccountMenager.LoadAccounts();
+            LoadAccounts();
+
             foreach (var plugin in PluginsManager.GetAllPlugins())
             {
                 PluginsListGrid.Children.Add(new PluginCard(plugin));
             }
             ItemsControl1.ItemsSource = accountCards;
-            AccountMenager.LoadAccounts();
-            LoadAccounts();
+           
 
             TaskManager.LoadTasks();
             foreach (var task in TaskManager.TaskList)
