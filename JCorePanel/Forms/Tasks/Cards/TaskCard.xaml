@@ -1,0 +1,119 @@
+﻿<UserControl x:Class="JCorePanel.TaskCard"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:JCorePanel"
+        mc:Ignorable="d"
+        Height="75" Width="163" Margin="0, 2, 2, 2">
+    <UserControl.Resources>
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="#242728" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="Width" Value="163" />
+            <Setter Property="Height" Value="75
+                    " />
+        </Style>
+    </UserControl.Resources>
+    <Border Style="{StaticResource CardStyle}" Height="65">
+        <Grid Margin="0,-2,-2,-2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="175"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid x:Name="InfoGrid" HorizontalAlignment="Left">
+                <Label x:Name="TitleLabel" Content="Name"
+                   Width="150" Height="45" FontSize="14" Foreground="White"
+                   Margin="5,-10,-10,-10" HorizontalAlignment="Left">
+                    <Label.Effect>
+                        <BlurEffect Radius="-1"/>
+                    </Label.Effect>
+                </Label>
+                <Label x:Name="PlaceholderLabel" Content="#IDLE" FontSize="10"
+                   Margin="5,28,-10,10" Foreground="#8A41FB" RenderTransformOrigin="0.258,0.225"
+                   HorizontalAlignment="Left">
+                    <Label.Effect>
+                        <BlurEffect Radius="0"/>
+                    </Label.Effect>
+                </Label>
+            </Grid>
+            <Rectangle x:Name="HoverRectangle" RadiusX="9" RadiusY="9"
+                   HorizontalAlignment="Left" Opacity="0" Height="65"
+                   VerticalAlignment="Center" Width="163">
+                <Rectangle.Fill>
+                    <SolidColorBrush Color="#3CFF8D"/>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Image x:Name="DeleteButton" Source="/Images/Icons/Delete.png" Width="15" Height="13"
+               Cursor="Hand" Opacity="0" Grid.Column="0" Margin="120,24,10,23" MouseDown="DeleteButton_MouseDown"/>
+            <Image x:Name="InfoButton" Source="/Images/Icons/Info.png" Width="13" Height="13"
+               Cursor="Hand" Opacity="0" Grid.Column="0" Margin="80,24,10,23" MouseDown="InfoButton_MouseDown"/>
+            <Image x:Name="SettingsButton" Source="/Images/Icons/Settings.png" Width="17" Height="14"
+               Cursor="Hand" Opacity="0" Grid.Column="0" Margin="40,24,10,23" MouseDown="SettingsButton_MouseDown"/>
+            <Image x:Name="TasksButton" Source="/Images/Icons/Document.png" Width="17" Height="14"
+               Cursor="Hand" Opacity="0" Grid.Column="0" Margin="0,24,10,23" MouseDown="TasksButton_MouseDown"/>
+            <Image x:Name="AccountsButton" Source="/Images/Icons/User.png" Width="17" Height="14"
+               Cursor="Hand" Opacity="0" Grid.Column="0" Margin="-40,24,10,23" MouseDown="AccountsButton_MouseDown"/>
+            <Image x:Name="StartButton" Source="/Images/Icons/Play.png" Width="34" Height="28"
+               Cursor="Hand" Opacity="0" Grid.Column="0" Margin="-110,0,10,0" MouseDown="StartButton_MouseDown"/>
+            <TextBlock x:Name="WorkStatus" Text="Example" HorizontalAlignment="Left" VerticalAlignment="Center"
+                   Foreground="White" Visibility="Collapsed" FontSize="11" Margin="-120,0,0,0" Grid.Column="1" Cursor="Hand"/>
+        </Grid>
+        <Border.Triggers>
+            <EventTrigger RoutedEvent="MouseEnter">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimation Storyboard.TargetName="HoverRectangle" Storyboard.TargetProperty="Opacity"
+                                     To="0.5" Duration="0:0:0.2"/>
+                        <DoubleAnimation Storyboard.TargetName="DeleteButton" Storyboard.TargetProperty="Opacity"
+                                     To="1" Duration="0:0:0.2"/>
+                        <DoubleAnimation Storyboard.TargetName="InfoButton" Storyboard.TargetProperty="Opacity"
+                                     To="1" Duration="0:0:0.2"/>
+                        <DoubleAnimation Storyboard.TargetName="SettingsButton" Storyboard.TargetProperty="Opacity"
+                                     To="1" Duration="0:0:0.2"/>
+                        <DoubleAnimation Storyboard.TargetName="AccountsButton" Storyboard.TargetProperty="Opacity"
+                                     To="1" Duration="0:0:0.2"/>
+                        <DoubleAnimation Storyboard.TargetName="TasksButton" Storyboard.TargetProperty="Opacity"
+                                     To="1" Duration="0:0:0.2"/>
+                        <DoubleAnimation Storyboard.TargetName="StartButton" Storyboard.TargetProperty="Opacity"
+                                     To="1" Duration="0:0:0.2"/>
+                        <DoubleAnimation Storyboard.TargetName="WorkStatus" Storyboard.TargetProperty="Opacity"
+                                     To="1" Duration="0:0:0.2"/>
+
+                        <DoubleAnimation Storyboard.TargetName="TitleLabel" Storyboard.TargetProperty="Effect.Radius"
+                                     To="5" Duration="0:0:0.2"/>
+                        <DoubleAnimation Storyboard.TargetName="PlaceholderLabel" Storyboard.TargetProperty="Effect.Radius"
+                                     To="5" Duration="0:0:0.2"/>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+            <EventTrigger RoutedEvent="MouseLeave">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <DoubleAnimation Storyboard.TargetName="HoverRectangle" Storyboard.TargetProperty="Opacity"
+                                     To="0" Duration="0:0:0.2"/>
+                        <DoubleAnimation Storyboard.TargetName="DeleteButton" Storyboard.TargetProperty="Opacity"
+                                     To="0" Duration="0:0:0.2"/>
+                        <DoubleAnimation Storyboard.TargetName="InfoButton" Storyboard.TargetProperty="Opacity"
+                                     To="0" Duration="0:0:0.2"/>
+                        <DoubleAnimation Storyboard.TargetName="SettingsButton" Storyboard.TargetProperty="Opacity"
+                                     To="0" Duration="0:0:0.2"/>
+                        <DoubleAnimation Storyboard.TargetName="AccountsButton" Storyboard.TargetProperty="Opacity"
+                                     To="0" Duration="0:0:0.2"/>
+                        <DoubleAnimation Storyboard.TargetName="TasksButton" Storyboard.TargetProperty="Opacity"
+                                     To="0" Duration="0:0:0.2"/>
+                        <DoubleAnimation Storyboard.TargetName="StartButton" Storyboard.TargetProperty="Opacity"
+                                     To="0" Duration="0:0:0.2"/>
+                        <DoubleAnimation Storyboard.TargetName="WorkStatus" Storyboard.TargetProperty="Opacity"
+                                     To="0" Duration="0:0:0.2"/>
+                        <DoubleAnimation Storyboard.TargetName="TitleLabel" Storyboard.TargetProperty="Effect.Radius"
+                                     To="0" Duration="0:0:0.2"/>
+                        <DoubleAnimation Storyboard.TargetName="PlaceholderLabel" Storyboard.TargetProperty="Effect.Radius"
+                                     To="0" Duration="0:0:0.2"/>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Border.Triggers>
+    </Border>
+
+</UserControl>

@@ -1,0 +1,69 @@
+﻿<UserControl x:Class="JCorePanel.Button"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:JCorePanel"
+             mc:Ignorable="d" Height="70" Width="183">
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="DefaultBackgroundBrush" Color="#8A41FB" />
+        <SolidColorBrush x:Key="DefaultForegroundBrush" Color="White" />
+        <SolidColorBrush x:Key="HoverBackgroundBrush" Color="#3CFF8D" />
+        <SolidColorBrush x:Key="HoverForegroundBrush" Color="#8A41FB" />
+    </UserControl.Resources>
+
+    <Button x:Name="button" HorizontalAlignment="Left" VerticalAlignment="Top"
+            Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Width}" Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Height}" Background="{StaticResource DefaultBackgroundBrush}"
+            Foreground="{StaticResource DefaultForegroundBrush}"
+            BorderBrush="Transparent" BorderThickness="0" 
+            FontSize="16" FontWeight="Regular" Grid.RowSpan="2" Cursor="Hand"
+            Content="{Binding ButtonText, RelativeSource={RelativeSource AncestorType={x:Type local:Button}}}" Click="button_Click">
+        <Button.Template>
+            <ControlTemplate TargetType="Button">
+                <Border x:Name="border" Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="10" Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Width}" Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Height}" >
+                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+
+                <ControlTemplate.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Trigger.EnterActions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <!-- Анимация изменения цвета фона кнопки на зеленый -->
+                                    <ColorAnimation 
+                                        Storyboard.TargetName="border" 
+                                        Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                        To="#3CFF8D" Duration="0:0:0.2" />
+
+                                    <!-- Анимация изменения цвета текста на фиолетовый -->
+                                    <ColorAnimation 
+                                        Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
+                                        To="#8A41FB" Duration="0:0:0.2" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </Trigger.EnterActions>
+                        <Trigger.ExitActions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <!-- Анимация изменения цвета фона кнопки обратно на исходный -->
+                                    <ColorAnimation 
+                                        Storyboard.TargetName="border" 
+                                        Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                        To="#8A41FB" Duration="0:0:0.2" />
+
+                                    <!-- Анимация изменения цвета текста обратно на исходный -->
+                                    <ColorAnimation 
+                                        Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
+                                        To="White" Duration="0:0:0.2" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </Trigger.ExitActions>
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+        </Button.Template>
+    </Button>
+</UserControl>

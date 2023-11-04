@@ -1,0 +1,115 @@
+﻿<UserControl x:Class="JCorePanel.PluginCard"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:JCorePanel"
+        mc:Ignorable="d"
+        Height="75" Width="175">
+    <UserControl.Resources>
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="#242728" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="Width" Value="163" />
+            <Setter Property="Height" Value="75
+                    " />
+
+        </Style>
+        <Style TargetType="ToggleButton">
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Grid>
+                            <Rectangle x:Name="frame"
+                               Fill="{TemplateBinding Background}"
+                               Stroke="{TemplateBinding BorderBrush}"
+                               StrokeThickness="2" Height="20" RadiusX="10" RadiusY="10"/>
+
+                            <Ellipse x:Name="thumb"
+                             Fill="{TemplateBinding BorderBrush}"
+                             HorizontalAlignment="Left" Margin="5"
+                             Width="10" Height="10">
+                                <Ellipse.RenderTransform>
+                                    <TranslateTransform x:Name="thumbTransform" X="0"/>
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="frame" Property="Stroke" Value="White"/>
+                                <Setter TargetName="frame" Property="Fill" Value="White"/>
+                                <Setter TargetName="thumb" Property="Fill" Value="#3CFF8D"/>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="thumbTransform"
+                                                                   Storyboard.TargetProperty="X"
+                                                                   Duration="0:0:0.2">
+                                                <LinearDoubleKeyFrame KeyTime="0:0:0" Value="0"/>
+                                                <LinearDoubleKeyFrame KeyTime="0:0:0.1" Value="20"/>
+                                                <LinearDoubleKeyFrame KeyTime="0:0:0.2" Value="20"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="thumbTransform"
+                                                                   Storyboard.TargetProperty="X"
+                                                                   Duration="0:0:0.2">
+                                                <LinearDoubleKeyFrame KeyTime="0:0:0" Value="20"/>
+                                                <LinearDoubleKeyFrame KeyTime="0:0:0.1" Value="20"/>
+                                                <LinearDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Border Style="{DynamicResource CardStyle}" Height="65" MouseEnter="Border_MouseEnter" MouseLeave="Border_MouseLeave">
+        <Grid Margin="0, -2, -2, -2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="175"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid HorizontalAlignment="Left">
+                <Label Name="TitleLabel" Content="FrendlyName" Width="150" Height="45"
+                   FontSize="14" Foreground="White" Margin="5,-10,-10,-10" HorizontalAlignment="Left"/>
+                <Label Name="PlaceholderLabel" Content="#Place"
+                   FontSize="10" Margin="5,28,-10,10" Foreground="#8A41FB" HorizontalAlignment="Left"/>
+            </Grid>
+
+            <Rectangle Name="HoverRectangle" RadiusX="9" RadiusY="9" Opacity="0"
+                   Height="65" Margin="0,0,12,0" VerticalAlignment="Center">
+                <Rectangle.Fill>
+                    <SolidColorBrush Color="#3CFF8D" />
+                </Rectangle.Fill>
+            </Rectangle>
+
+            <Image Source="/Images/Icons/Info.png" x:Name="InfoButton" Margin="120,24,10,23" Width="13" Height="13"
+               Cursor="Hand" Opacity="0" Grid.Column="0" MouseDown="InfoButton_MouseDown">
+
+            </Image>
+
+            <Image Source="/Images/Icons/Settings.png" x:Name="SettingsButton" Margin="80,24,10,23" Width="17" Height="14" Opacity="0" Grid.Column="0" Cursor="Hand" MouseDown="SettingsButton_MouseDown">
+            </Image>
+
+            <ToggleButton Margin="10,24,125,25" x:Name="pluginEnabledToggleButton" Opacity="0"
+                      Cursor="Hand" Grid.Column="0" Click="pluginEnabledToggleButton_Click">
+            </ToggleButton>
+        </Grid>
+    </Border>
+
+</UserControl>

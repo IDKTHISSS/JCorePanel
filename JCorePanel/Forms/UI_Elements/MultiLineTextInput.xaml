@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="JCorePanel.MultiLineTextInput"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:JCorePanel"
+             mc:Ignorable="d" Height="344" Width="248">
+    <UserControl.Resources>
+        <Style x:Key="placeHolder" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Grid>
+                            <TextBox Text="{Binding Path=Text,
+                                                RelativeSource={RelativeSource TemplatedParent},
+                                                Mode=TwoWay,
+                                                UpdateSourceTrigger=PropertyChanged}"
+                                 CaretBrush="White"
+                                 x:Name="textSource"
+                                 BorderBrush="{x:Null}"
+                                 Foreground="White"
+                                     TextWrapping="Wrap"
+                                     
+                                     BorderThickness="0"
+                                 Background="Transparent"
+                                 Panel.ZIndex="2" />
+                            <TextBox Text="{TemplateBinding Tag}" BorderThickness="0"   BorderBrush="{x:Null}" Background="{TemplateBinding Background}" Panel.ZIndex="1">
+                                <TextBox.Style>
+                                    <Style TargetType="{x:Type TextBox}">
+                                        <Setter Property="Foreground" Value="Transparent"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=Text, Source={x:Reference textSource}}" Value="">
+                                                <Setter Property="Foreground" Value="Gray"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Border x:Name="LoginBox" Background="#FF242728" CornerRadius="9" Padding="5"   HorizontalAlignment="Center" VerticalAlignment="Center" Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Width}" Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Height}" RenderTransformOrigin="0.5,0.5" Cursor="Hand">
+        <Border.RenderTransform>
+            <TransformGroup>
+                <ScaleTransform/>
+                <SkewTransform/>
+                <RotateTransform Angle="-0.075"/>
+                <TranslateTransform/>
+            </TransformGroup>
+        </Border.RenderTransform>
+        <Grid VerticalAlignment="Center" Margin="5,5,5,5" Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Height}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="9*"/>
+                <ColumnDefinition Width="0*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border BorderThickness="5" BorderBrush="Transparent" Grid.Column="1">
+                <TextBox x:Name="InputTextBox" VerticalAlignment="Stretch" Padding="0,20,0,20" Style="{StaticResource placeHolder}"
+                 Tag="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=Tag}" VerticalContentAlignment="Top" Foreground="Gray" 
+                 BorderThickness="0" Background="Transparent" FontSize="16" TextAlignment="Left" 
+                 BorderBrush="{x:Null}" TextWrapping="Wrap" TextChanged="InputTextBox_TextChanged" />
+            </Border>
+
+            <Grid/>
+        </Grid>
+    </Border>
+
+</UserControl>

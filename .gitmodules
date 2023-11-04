@@ -1,0 +1,15 @@
+[submodule "JCorePanelBase"]
+	path = JCorePanelBase
+	url = https://github.com/IDKTHISSS/JCorePanelBase
+[submodule "Extern/JCorePanelBase"]
+	path = Extern/JCorePanelBase
+	url = https://github.com/IDKTHISSS/JCorePanelBase
+[submodule "Extern/JCoreTradeFramework"]
+	path = Extern/JCoreTradeFramework
+	url = https://github.com/IDKTHISSS/JCoreTradeFramework
+[submodule "Extern/SteamAuth"]
+	path = Extern/SteamAuth
+	url = https://github.com/geel9/SteamAuth
+[submodule "Extern/SteamKit2"]
+	path = Extern/SteamKit2
+	url = https://github.com/SteamRE/SteamKit
