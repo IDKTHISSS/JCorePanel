@@ -9,6 +9,7 @@ using System.Net;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 
@@ -37,6 +38,7 @@ namespace JCorePanel
                 return bitmapImage;
             }
         }
+
         public static List<JCSteamAccountInstance> GetAccountsFromLogins(List<string> logins)
         {
             if (logins == null) return new List<JCSteamAccountInstance>();
@@ -53,6 +55,7 @@ namespace JCorePanel
             }
             return accounts;
         }
+
         public static List<AccountInstance> GetAccountInstancesFromLogins(List<string> logins)
         {
             if (logins == null) return new List<AccountInstance>();

@@ -197,13 +197,7 @@
                                         <UniformGrid Columns="4" Width="734"/>
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <!-- Здесь вы можете разместить ваш UserControl (AccountCard) -->
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
                             </ItemsControl>
-
                         </ScrollViewer>
                         <local:Button ButtonText="Add Account" ButtonClick="Button_MouseDown" Width="162" Height="34" HorizontalAlignment="Left" Margin="561,17,0,0" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" >
                             <local:Button.RenderTransform>
@@ -246,7 +240,7 @@
 
                         <local:InputBox x:Name="SearchPluginBox" Tag="Search" InputText="Search" Height="34" Width="713" Margin="13,17,3,467" Grid.Row="1" TextChanged="SearchPluginBox_TextChanged" />
 
-
+                        
 
                         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden" Margin="0,62,-8,0" Grid.Row="1">
                             <UniformGrid x:Name="PluginsListGrid" Columns="4" VerticalAlignment="Top" HorizontalAlignment="Center" Width="734">

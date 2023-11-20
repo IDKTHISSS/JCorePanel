@@ -13,7 +13,9 @@ namespace JCorePanel
 
             foreach (var property in plugin.Properties)
             {
+                if (property.bIsHidden) continue;
                 PropreryListGrid.Children.Add(new PluginPropertyCard(plugin, property));
+
             }
         }
 

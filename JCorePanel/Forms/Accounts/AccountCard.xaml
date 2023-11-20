@@ -71,7 +71,7 @@
                 </Image>
             </Grid>
 
-            <Image x:Name="WorkAnimation" Width="40" Height="40" Opacity="0"  Source="/Resources/Loading.png" >
+            <Image x:Name="WorkAnimation" Width="40" Height="40" Opacity="0" Source="/Resources/Loading.png" >
 
             </Image>
 

@@ -26,6 +26,7 @@ namespace JCorePanel
                 CurrectAccount.UpdateAccountCardFromCache(CurrectAccount.AccountCache);
             }
             LoginLabel.Content = CurrectAccount.AccountInfo.Login;
+
             SetupWorkAnimation();
         }
 
@@ -50,10 +51,8 @@ namespace JCorePanel
             contextMenu.PlacementTarget = QuickActionButtonImage;
             contextMenu.IsOpen = true;
         }
-
         private void SetupWorkAnimation()
         {
-            WorkAnimation.Source = Utils.ConvertBitmapToBitmapImage(Resource1.Loading);
             RotateTransform rotateTransform = new RotateTransform();
             WorkAnimation.HorizontalAlignment = HorizontalAlignment.Center;
             WorkAnimation.VerticalAlignment = VerticalAlignment.Center;

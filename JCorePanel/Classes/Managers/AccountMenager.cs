@@ -29,6 +29,7 @@ namespace JCorePanel
                             account.AccountInfo = steamAccount;
                             account.AccountCache = LoadCache(steamAccount);
                             AccountMenager.AccountsList.Add(account);
+                            
                             Logger.Log($"Account: {steamAccount.Login} was successful loaded.");
 
                         }

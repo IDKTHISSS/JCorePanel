@@ -65,6 +65,9 @@ namespace JCorePanel
             {
                 AccountCard.WorkAnimation.Opacity = newValue ? 1 : 0;
 
+                AccountCard.WorkAnimation.Source = newValue ? Utils.ConvertBitmapToBitmapImage(Resource1.Loading) : null;
+      
+
                 AccountCard.WorkStatus.Opacity = newValue ? 1 : 0;
 
                 DoubleAnimation hoverRectangleAnimation = new DoubleAnimation(newValue ? 0.5f : 0, TimeSpan.FromSeconds(0.2));
@@ -105,11 +108,11 @@ namespace JCorePanel
         }
         private async Task UpdateInfo(JCSteamAccountInstance CurrectAccount)
         {
-            if (CurrectAccount.AccountInfo.MaFile == null || CurrectAccount.AccountInfo.MaFile == new SteamGuardAccount())
+            /*if (CurrectAccount.AccountInfo.MaFile == null || CurrectAccount.AccountInfo.MaFile == new SteamGuardAccount())
             {
                 JCorePanelBase.GlobalMenager.ShowDialog("For updating info you need upload maFile.");
                 return;
-            }
+            }*/
             SetInWork(true);
             SetWorkStatus("Logging");
             await AccountInfo.CheckSession();
